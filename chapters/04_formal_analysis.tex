@@ -1,0 +1,82 @@
+%------------------------------------------------------------------------------
+% CHAPTER 4: FORMAL ANALYSIS USING ALLOY
+%------------------------------------------------------------------------------
+\chapter{Formal Analysis Using Alloy}
+\label{ch:alloy}
+
+\section{Introduction to the Model}
+\label{sec:alloy_intro}
+
+This chapter presents the formal specification of the system using Alloy, a declarative modeling language based on first-order logic. The model captures the key entities, their relationships, and the state transitions described in the previous chapters.
+
+\section{Alloy Code}
+\label{sec:alloy_code}
+
+\begin{lstlisting}[language=alloy, caption=BBP Formal Model]
+module bbp_formal
+
+// Enumerations
+// track the status of a Public Path
+enum PathStatus {
+    Optimal, Medium, Sufficient, RequiresMaintenance, PermanentlyClosed
+}
+
+enum PathLifecycle{
+    Created, MergeData
+}
+
+// track the lifecycle of a manually-recorded Trip
+enum ManualTripState {
+    InsertingStreet, SavedPrivate, ReadyToPublish, Published, Deleted
+}
+
+// track the lifecycle of an automatic-recorded Trip
+enum AutomaticTripState {
+    Idle, DetectBiking, Recording, Analysis, SavedPrivate, AwaitingValidation,
+    ReadyToPublish, NotPublishable, Published, Deleted
+}
+
+// Entities
+sig User {} // Guest or Registered (we model registration via a subset)
+
+sig RegisteredUser in User { // Registered users are a subset of all users
+    recorded: set Trip
+}
+
+// A public path whose status evolves over time
+sig Path {
+    var status: one PathStatus
+}
+
+// abstract signature Trip with two subtypes (ManualTrip and AutomaticTrip)
+abstract sig Trip {
+    owner : one RegisteredUser, // only Registered Users can record a Trip
+    about : one Path,
+    reportedStatus : one PathStatus // what the user says about the path
+}
+
+sig ManualTrip extends Trip {
+    var mState : one ManualTripState
+}
+
+sig AutomaticTrip extends Trip {
+    var aState : one AutomaticTripState
+}
+
+// Ensures that all the Trip were recorded by exactly one Registered User
+// and 'recorded' matches that ownership
+fact recordedMatchesOwner {
+    all t: Trip | t in t.owner.recorded
+    all u: RegisteredUser | u.recorded = { t: Trip | t.owner = u }
+}
+\end{lstlisting}
+
+\section{Model Verification}
+\label{sec:alloy_verification}
+
+The model can be executed using Alloy Analyzer to verify various properties of the system, such as:
+\begin{itemize}
+    \item Ensuring that only registered users can create trips
+    \item Verifying that the state transitions follow the defined state diagrams
+    \item Checking that path status updates correctly based on merged trip data
+\end{itemize}

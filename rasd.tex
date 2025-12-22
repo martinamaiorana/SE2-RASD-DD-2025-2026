@@ -1,0 +1,73 @@
+% RASD Template - Politecnico di Milano
+% Software Engineering 2 - MSc in Computer Science
+% Modular version - Organized in multiple files and folders
+
+\documentclass[12pt,a4paper,twoside]{book}
+
+%------------------------------------------------------------------------------
+% CONFIGURATION FILES
+%------------------------------------------------------------------------------
+\input{config/packages}
+\input{config/colors}
+\input{config/formatting}
+\input{config/metadata}
+
+%------------------------------------------------------------------------------
+% BEGIN DOCUMENT
+%------------------------------------------------------------------------------
+\begin{document}
+
+\fancypagestyle{plain}{%
+\fancyhf{}
+\fancyhead[RO,RE]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+%------------------------------------------------------------------------------
+% FRONTMATTER
+%------------------------------------------------------------------------------
+\pagestyle{empty}
+\frontmatter
+
+\input{frontmatter/titlepage}
+\input{frontmatter/revision}
+
+%------------------------------------------------------------------------------
+% MAIN CONTENT
+%------------------------------------------------------------------------------
+\addtocontents{toc}{\vspace{2em}}
+\mainmatter
+
+\let\latexchapter\chapter
+\renewcommand{\chapter}{\cleardoublepage\phantomsection\latexchapter}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO, RE]{\textbf{\textcolor{bluepoli}{\thechapter\hsp\textcolor{bluepoli}{|   }\hsp \leftmark}}}
+\fancyhead[LE, RO]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%------------------------------------------------------------------------------
+% CHAPTERS
+%------------------------------------------------------------------------------
+\input{chapters/01_introduction}
+\input{chapters/02_overall_description}
+\input{chapters/03_specific_requirements}
+\input{chapters/04_formal_analysis}
+\input{chapters/05_effort_spent}
+
+%------------------------------------------------------------------------------
+% BIBLIOGRAPHY (if needed)
+%------------------------------------------------------------------------------
+% \addtocontents{toc}{\vspace{2em}}
+% \bibliography{RASD_bibliography}
+
+%------------------------------------------------------------------------------
+% APPENDICES
+%------------------------------------------------------------------------------
+\cleardoublepage
+\addtocontents{toc}{\vspace{2em}}
+
+\cleardoublepage
+
+\end{document}

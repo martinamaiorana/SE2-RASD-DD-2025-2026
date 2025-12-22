@@ -1,0 +1,156 @@
+%------------------------------------------------------------------------------
+% CHAPTER 1: INTRODUCTION
+%------------------------------------------------------------------------------
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Purpose}
+\label{sec:purpose}
+
+The Best Bike Paths (BBP) system addresses the recurring need for Bike Riders to discover new routes and track their cycling activities. Registered users can record their rides either manually, by entering street names, or automatically, leveraging their device sensors.
+
+All users, regardless of registration status, can search for paths between any given origin and destination, visualizing them on the map. Search results are ranked based on a score that integrates the path's status and its efficiency, measured as trip time. Additionally, the system offers statistics for each path to any user, including trip time and, when available, it also provides the current weather conditions along the route.
+
+A registered user can access his previously recorded and validated trips and look at its performance, speed, and weather conditions during the recording.
+
+The system aggregates identical paths submitted by multiple users, using metrics like freshness and status to combine the information. As part of this merging process, the final trip time is calculated by averaging the individual trip times of the paths being aggregated.
+
+\section{Scope}
+\label{sec:scope}
+
+\subsection{Description of the System}
+
+Best Bike Paths (BBP) is a standalone software meant to help cyclists facilitate the creation and management of a collective bike paths inventory. The software operates as a distributed system (like a downloadable smartphone application) that integrates both user-generated content and automated sensor data retrieved from users' mobile device/devices.
+
+The system provides accurate and up-to-date details regarding paths thanks to a data aggregation engine capable of merging conflicting information from multiple sources based on freshness and confirmation from users.
+
+BBP functions as an independent entity for the user but it relies heavily on this ecosystem of mobile sensors and external APIs (weather forecast, map display and so on).
+
+\subsubsection{Main Features}
+
+\paragraph{Trip Recording}
+\begin{itemize}
+    \item Manual entry of bike paths with street-level details and path status
+    \item Automatic tracking of rides using mobile device sensors, including distance, average speed and duration
+    \item Ensuring continuous data collection and storage of the current trip even in areas with no connectivity, to be synchronized once the connection is restored
+\end{itemize}
+
+\paragraph{Path Discovery and Information}
+\begin{itemize}
+    \item Search for bike paths between specified locations
+    \item Visualization of paths on map
+    \item Display of path characteristics (total distance, trip time)
+    \item Provision of current weather information for a selected route
+\end{itemize}
+
+\paragraph{Up to date Information}
+\begin{itemize}
+    \item Aggregation of path data from multiple users
+\end{itemize}
+
+\paragraph{Personal Analytics}
+\begin{itemize}
+    \item Storage and retrieval of a registered user cycling history
+\end{itemize}
+
+\subsection{Goals}
+\label{subsec:goals}
+
+\begin{itemize}
+    \item \textbf{[G1]}: A registered user aims to record its cycling trips
+    \item \textbf{[G2]}: A registered user wants to access their previously recorded bike trips
+    \item \textbf{[G3]}: A registered user aims to receive statistics about its past trips, including average speed, trip time and, when available, meteorological conditions (at recording time)
+    \item \textbf{[G4]}: A registered user wants to share information about a bike path it has recorded, including their status and the presence of obstacles, making this information available to the community (all users)
+    \item \textbf{[G5]}: A User wants to search for bike paths given an origin and a destination point and visualize results on both a map
+    \item \textbf{[G6]}: A User wants to retrieve up to date information about bike paths, their status and current weather conditions
+\end{itemize}
+
+\subsection{World and Machine Phenomena}
+
+\subsubsection{World Phenomena}
+
+\begin{enumerate}
+    \item A Registered User wants to go for a bike ride and record the trip.
+    \item A User wants to get all paths available given origin and destination point.
+    \item A registered user wants to get all his private paths.
+    \item A User wants to know information about a specific bike path, such as total track distance, average speed and status.
+    \item A registered user wants to record a bike path in manual mode.
+    \item A registered user wants to record a bike path in automatic mode.
+    \item A registered user wants to publish one of his private paths.
+    \item A user wants to add an obstacle on the path (within a certain time interval from the path).
+    \item A mobile device with sensors (GPS, accelerometer, gyroscope) collects GPS and motion data while the user is biking.
+    \item External weather data services provide information about environmental conditions.
+\end{enumerate}
+
+\subsubsection{Shared Phenomena - World Controlled}
+
+\begin{enumerate}
+    \item A user signs up to the system.
+    \item A registered user starts recording their trip (automated mode).
+    \item A registered user stops recording their trip (automated mode).
+    \item A registered user inserts their bike trip data, specifying name and status of each street (manual mode).
+    \item A registered user accesses their private bike paths.
+    \item A registered user publishes their trip.
+    \item A user searches for all paths available from an origin and a destination point.
+    \item A user consults the list of paths on the map.
+    \item A user selects one of the proposed paths.
+    \item A user confirms or denies the presence of a pothole (automatically detected by BBP).
+\end{enumerate}
+
+\subsubsection{Shared Phenomena - Machine Controlled}
+
+\begin{enumerate}
+    \item The system shows bike trip data acquired from mobile devices of the registered user (automated mode).
+    \item The system asks the registered user to confirm or correct the presence of a pothole.
+    \item The system shows on the map the bike path(s) between given origin and destination points.
+    \item The system rank the paths based on their score (involving path status and effectiveness)
+    \item The system displays consolidated path information, merging data provided by different users
+\end{enumerate}
+
+\section{Definitions, Acronyms, Abbreviations}
+\label{sec:definitions}
+
+\subsection{Definitions}
+\begin{itemize}
+    \item \textbf{Registered user}: users that are already registered in the platform.
+    \item \textbf{Guest user}: users that are not registered in the platform
+    \item \textbf{User}: term used to indicate both registered and guest users interacting with the platform, they can be registered or not already registered.
+    \item \textbf{Bike path}: term used to indicate a path where a proper bike track exists or where cars are rare and speed limits are compatible with the average speed of a bike.
+    \item \textbf{Trip}: private ordered set of GPS coordinates or street names with weather data recorded by a Register user
+    \item \textbf{Path}: public route between two points, resulting from the merge process against multiple Trips with same GPS coords and total distance.
+\end{itemize}
+
+\subsection{Acronyms}
+\begin{itemize}
+    \item \textbf{RASD}: Requirements Analysis and Specification Document
+    \item \textbf{API}: Application Programming Interface
+    \item \textbf{BBP}: Best Bike Paths
+    \item \textbf{GPS}: Global Positioning System
+    \item \textbf{GDPR}: General Data Protection Regulation
+\end{itemize}
+
+\subsection{Abbreviations}
+\begin{itemize}
+    \item \textbf{G[n]}: Goal number n
+    \item \textbf{R[n]}: Requirement number n
+    \item \textbf{D[n]}: Domain assumption/Dependency/Constraint number n
+    \item \textbf{UC[n]}: Use Case number n
+\end{itemize}
+
+\section{Reference Documents}
+\label{sec:references}
+\begin{itemize}
+    \item Project assignment document
+    \item IEEE Standard for Software Requirements Specifications
+\end{itemize}
+
+\section{Document Structure}
+\label{sec:structure}
+This document is organized as follows:
+\begin{itemize}
+    \item \textbf{Chapter 1 - Introduction}: Provides an overview of the document, including purpose, scope, goals, and definitions
+    \item \textbf{Chapter 2 - Overall Description}: Describes the general factors affecting the product including product perspective, functions, user characteristics, and assumptions
+    \item \textbf{Chapter 3 - Specific Requirements}: Contains all software requirements in detail including functional requirements, use cases, performance requirements, and quality attributes
+    \item \textbf{Chapter 4 - Formal Analysis}: Presents the Alloy formal specification
+    \item \textbf{Chapter 5 - Effort Spent}: Documents the work distribution among team members
+\end{itemize}
