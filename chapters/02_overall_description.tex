@@ -7,31 +7,119 @@
 \section{Product Perspective}
 \label{sec:perspective}
 
-Best Bike Paths (BBP) is a standalone software meant to help cyclists facilitate the creation and management of a collective bike paths inventory. The software operates as a distributed system (like a downloadable smartphone application) that integrates both user-generated content and automated sensor data retrieved from users' mobile device/devices.
+Best Bike Paths (\texttt{BBP}) is a standalone software meant to help cyclists facilitate the creation and management of a collective bike paths inventory. The software operates as a distributed system (like a downloadable smartphone application) that integrates both user-generated content and automated sensor data retrieved from users' mobile device/devices.
 
-Specifically BBP interacts with mobile hardware interfaces, leveraging GPS to reconstruct trip trajectories and inertial sensors (gyroscopes and accelerometers) to infer road surfaces conditions and detect anomalies such as potholes. Furthermore the system interfaces with external meteorological services to enrich trip data with real-time variables like temperature, wind-speed and raining conditions.
+Specifically \texttt{BBP} interacts with mobile hardware interfaces, leveraging \texttt{GPS} to reconstruct trip trajectories and inertial sensors (gyroscopes and accelerometers) to infer road surfaces conditions and detect anomalies such as potholes. Furthermore, the system interfaces with external meteorological services to enrich trip data with real-time variables like temperature, wind-speed and raining conditions.
 
 The system provides accurate and up-to-date details regarding paths thanks to a data aggregation engine capable of merging conflicting information from multiple sources based on freshness and confirmation from users.
 
-BBP functions as an independent entity for the user but it relies heavily on this ecosystem of mobile sensors and external APIs (weather forecast, map display and so on).
+\texttt{BBP} functions as an independent entity for the user but it relies heavily on this ecosystem of mobile sensors and external \texttt{APIs} (weather forecast, map display and so on).
+
+\subsection{Scenarios}
+\label{sec:scenarios}
+
+\begin{enumerate}
+    \item \textbf{User Signup}: The guest user Alice accesses the sign-up interface to create a profile. Upon successful validation of the provided registration details, the system grants the new user the "Registered" status, allowing him to access new functions reserved to Registered Users.
+
+    \item \textbf{User login}: The registered user Bob inputs his credentials in \texttt{BBP} which validates them and loads the user's personal session.
+
+    \item \textbf{Automated trip recording}: The registered user Carol initiates a recording session. Once Carol begins riding, the \texttt{BBP} system automatically detects the cycling activity and begins logging GPS coordinates, sensor data, and timestamps. Recording continues until Carol pauses cycling or stops the session.
+    
+    \item \textbf{Anomaly validation}: Following an automated trip, the user Carol has 72 hours to review potential obstacles detected through \texttt{BBP} sensor data analysis and confirm or reject identified potholes, preventing false positives from entering the database.
+
+    \item \textbf{Trip Publishing}: The registered user Carol accesses her personal history to select a trip recorded and validated in the past to share the collected data with the community. \texttt{BBP} ensures data anonymization before publishing it
+
+    \item \textbf{Private Trip Reviews}: The registered user Carol accesses one of her private trips to visualize it on the map or view recording statistics, such as average speed, trip duration and weather conditions at the time of recording.
+
+    \item \textbf{Manual Path Insertion}: The registered user David manually inserts information about a specific bike path by entering individual street names and their status (e.g., "optimal", "requires maintenance") without requiring physical cycling or automated recording.
+
+    \item \textbf{Path searching}: The user Erwin, whether registered or not, enters an origin and a destination. She can do it by either inserting a street name or by selecting a point on the map. The \texttt{BBP} computes and visualizes the available paths connecting the two chosen endpoints. When multiple routes exist for a given query, the user Erwin will view them ordered by their "Path score".
+
+    \item \textbf{Path Score Calculation}: The registered user Frank publishes a trip reporting a bike path as \texttt{OPTIMAL}. The \texttt{BBP} system merges Erwin's trip with existing data from other users who previously reported the same path as \texttt{REQUIRES\_MAINTENANCE}. Based on data freshness and consensus, \texttt{BBP} recalculates the path status and updates the path score considering both the new aggregated status and the path's effectiveness (average trip time).
+
+    \item \textbf{Path Details Viewing}: The user Frank, whether registered or not, selects a bike path from search results to view detailed information including current status, trajectory on the map and current weather conditions along the path.
+    
+\end{enumerate}
+
+
+\subsection{Class Diagram}
+\label{sec:class_diagram}
+
+The \texttt{UML} Class diagram below represents a high level model of the mobile application described in this document. There are two kinds of users: \texttt{RegisteredUser} and its superclass \texttt{User}. \texttt{Trip} class represents a bike ride of a \texttt{RegisteredUser}, it can be an \texttt{AutomaticTrip} or a \texttt{ManualTrip}. \\\\
+Whenever a \texttt{Trip} is published by its creator, the system anonymizes and merges it with other \texttt{Trip}(s) from different \texttt{RegisteredUser}(s), contributing to the public \texttt{Path}, which can be searched, found and seen on map by \texttt{User}(s). 
+\\\\
+The \texttt{ManualTrip} class has a list of streets, which are inserted by the \texttt{RegisteredUser}. They are suddenly translated into \texttt{GPSCoordinates} by using an external \texttt{MapService}, also used for \texttt{Street} lookup and \texttt{Path} visualization. \\
+On the other hand, \texttt{AutomaticTrip} leverages the \texttt{MobileSensors} for directly obtaining \texttt{GPSCoordinates} and \texttt{SensorReadings} which are analyzed to find the \texttt{Obstacle}(s). Any \texttt{Obstacle} must be confirmed by the \texttt{RegisteredUser} recording the \texttt{Trip} before it can be published.
+\\\\
+\texttt{Statistics} depending on speed, such as average speed and trip time, are only recorded for \texttt{AutomaticTrip}. \texttt{Weather} forecasts are provided by an external \texttt{WeatherService} and are used within \texttt{Statistics} since they can influence performance. Also, any \texttt{User} consults the \texttt{WeatherService} when it views a public \texttt{Path}.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=\textwidth]{diagrams/class_diagram_inv.svg}
+    \caption{Class Diagram}
+    \label{fig:class_diagram}
+\end{figure}
+
+\subsection{State Diagrams}
+\label{sec:state_diagrams}
+
+\subsubsection{Path}
+
+This state diagram shows how the status of a \texttt{Path} evolves as \texttt{BBP} receives already-anonymized publishable information from different Registered Users. When a first \texttt{Trip} is published and has no corresponding \texttt{Path}, an instance is created, corresponding to the \texttt{CREATED} state. Once the first published \texttt{Trip} is merged, during the \texttt{MERGE\_DATA} stage, the \texttt{Path} enters one of the status states (e.g., \texttt{OPTIMAL} or \texttt{REQUIRES\_MAINTENANCE}).\\
+When one or more \texttt{Trip}(s) referring to the same path are published, their information is merged into the corresponding \texttt{Path}. The \texttt{Path} status reflects the status of the most recently published \texttt{Trip}. If more than two \texttt{Trip}(s) referring to the same \texttt{Path} are published in the same timeframe window, the Path status is determined by majority voting among their reported statuses. 
+\texttt{Trip} then moves to the newly computed path status corresponding state \\
+When all reliable information indicates that the path can no longer be used, it moves to the \texttt{PERMANENTLY\_CLOSED} final state. As the new status, also the new path score is recomputed during the \texttt{MERGE\_DATA} state.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8\textwidth]{diagrams/path_state_diagram.svg}
+    \caption{Path State Diagram}
+    \label{fig:path_state}
+\end{figure}
+
+\subsubsection{Manual Trip}
+
+This state diagram describes the lifecycle of a \texttt{ManualTrip}. When a Registered User clicks on the manual \texttt{Trip} recording button, the trip enters the \texttt{INSERTING\_STREET} state, during which the user specifies the list of streets and assigns a status to each segment one at a time. The user can iteratively add streets until satisfied. Once the user submits the form, \texttt{BBP} automatically computes intersections between streets and computes the total distance, saving the \texttt{Trip} in the \texttt{SAVED\_PRIVATE} state. Unlike \texttt{AutomaticTrip}, \texttt{ManualTrip} does not involve obstacle detection, so the \texttt{Trip} automatically transitionsto \texttt{READY\_TO\_PUBLISH} without requiring validation. When the user decides to share the collected information with the community, the trip moves to the \texttt{PUBLISHED} state, triggering the \texttt{Path.MERGE\_DATA} state and contributing to its corresponding public path. From now on, at any time, the user might delete the \texttt{Trip}, moving it to the \texttt{DELETED} final state.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8\textwidth]{diagrams/manual_trip_state_diagram.svg}
+    \caption{Manual Trip State Diagram}
+    \label{fig:manual_trip_state}
+\end{figure}
+
+\subsubsection{Automatic Trip}
+
+The lifecycle of an \texttt{AutomaticTrip} begins in \texttt{IDLE} state. Once the user clicks on the "Start automatic recording" button, it moves to \texttt{DETECT\_BIKING}. In this state, the \texttt{BBP} monitors movement: if the user speed exceeds the biking speed threshold, it enters the \texttt{RECORDING} state, during which GPS coordinates and sensor data are collected; if it drops below, it reverts to \texttt{DETECT\_BIKING}. After the user stops the recording, the \texttt{Trip} undergoes \texttt{ANALYSIS}, where \texttt{BBP} analyzes sensor data to identify obstacles, computes statistics and queries the external \texttt{Weather Service} to retrieve meteorogical data, afterwards moving to the \texttt{SAVED\_PRIVATE} state. \\ 
+Then, If no obstacles are found, it proceeds to the \texttt{READY\_TO\_PUBLISH} state. Otherwise, it enters the \texttt{AWAITING\_VALIDATION} stage. From here, the user has 72 hours to validate the data to reach \texttt{READY\_TO\_PUBLISH}; otherwise, the \texttt{Trip} becomes \texttt{NOT\_PUBLISHABLE}. Finally, the user can transition the \texttt{Trip} to \texttt{PUBLISHED} or, from any of the previous states, to \texttt{DELETED}, or simply keep it in their private history to end the process.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=\textwidth]{diagrams/automatic_trip_state_diagram.svg}
+    \caption{Automatic Trip State Diagram}
+    \label{fig:automatic_trip_state}
+\end{figure}
+
 
 \section{Product Functions}
 \label{sec:functions}
 
 \begin{itemize}
-    \item \textbf{User Management}: Allows unregistered users to sign up and registered users to log in, managing their profiles and access rights to restricted features like data recording and publishing.
+    \item \textbf{User Management}: Allows unregistered users to sign up and registered users to log in and access rights to restricted features like trip recording and publishing.
 
-    \item \textbf{Automated Activity Tracking}: Automatically detects when a registered user is cycling based on mobile sensors' data. It records the trajectory via GPS and continuously monitors device sensors (accelerometer, gyroscope) to identify road anomalies and significant movements.
+    \item \textbf{Automated Trip Recording}: Automatically detects when a registered user is cycling based on mobile sensors' data. It records the trajectory via GPS and continuously monitors device sensors (accelerometer, gyroscope) to identify road anomalies and significant movements.
 
-    \item \textbf{Manual Activity Tracking}: Enables registered users to manually insert bike path information by specifying street names and assigning them a status (e.g., "optimal", "requires maintenance") without real-time tracking.
+    \item \textbf{Manual Activity Tracking}: Enables registered users to manually insert bike path information by specifying street names and assigning them a status without the need of physical cycling and real-time tracking.
 
-    \item \textbf{Anomaly detection and user validation}: Processes sensor data to infer the presence of obstacles (e.g., potholes). It presents these potential anomalies to the user for post-trip validation to avoid false positives.
+    \item \textbf{Anomaly detection and user validation}: Processes sensor data to infer the presence of obstacles (e.g., potholes). It presents these potential anomalies to the user for post-trip-recording validation to avoid false positives.
 
-    \item \textbf{Data Enrichment}: Integrates with external weather services to enrich trip data with weather conditions (e.g., temperature, wind speed). This involves providing historical weather conditions to past trips and real-time weather conditions when a user visualizes a specific path.
+    \item \textbf{Data Enrichment}: Integrates with external weather services to enrich trip data with weather conditions, temperature and wind speed. This involves providing historical weather conditions to past trips and real-time weather conditions along the path a user is currently visualizing.
 
-    \item \textbf{Data Merging}: Implements a logic engine that fuses information about the same path from different users. It resolves conflicts and determines the current path status based on freshness and number of confirming data obtained.
+    \item \textbf{Data Merging}: Implements a merge process that fuses information about the same path from different users. It resolves conflicts and determines the current path status based on freshness and number of confirming data obtained.
 
-    \item \textbf{Path Scoring and Searching}: Calculates a "Path Score" for available routes, combining the status and trip time. It allows users to search for paths between an origin and a destination, visualizing them on a map ranked by this score.
+    \item \textbf{Path Score Calculation}: Automatically computes a quality metric for bike paths based on aggregated status and route effectiveness (average trip time), recalculating whenever new trip data is merged.
+
+    \item \textbf{Path Search}: Enables users to query routes between two points and view them on a map, ranked by their path scores to facilitate informed route selection.
 
     \item \textbf{Statistical Reporting}: Generates performance metrics for registered users, offering the possibility to review past trips with data such as average speed and total trip time.
 \end{itemize}
@@ -39,31 +127,31 @@ BBP functions as an independent entity for the user but it relies heavily on thi
 \section{User Characteristics}
 \label{sec:users}
 
-In the BBP platform, a User can be a Guest User or a Registered User.
+In the BBP platform, there are two kind of user: the generic one \texttt{User} and the \texttt{Registered User}
 
-\subsection{Guest User}
+\subsubsection{ User}
 
-A Guest User can explore bike paths without creating an account.
+A User can explore bike paths without creating an account.
 
-He can search for paths between any chosen origin and destination and view the corresponding routes directly on the map, selecting the safest or most efficient one. In fact, if multiple paths exist, BBP shows them to the user ranked by a score based on the path status and the effectiveness of the path in reaching the destination from the given origin. For each proposed path the Guest User can inspect its public characteristics, such as total distance, estimated trip time, and the status validated by the community.
+He can search for paths between any chosen origin and destination and view the corresponding trajectory directly on the map, selecting the safest (path status) or most efficient one (effectiveness = average trip time). In fact, if multiple paths exist, \texttt{BBP} shows them to the user ranked by a score based on the path status and the effectiveness of the path in reaching the destination from the given origin. For each proposed path the User can inspect its public characteristics, such as total distance, estimated trip time, and the status validated by the community.
 
-Guest Users benefit from always-updated information, since BBP merges multiple contributions provided by different users to determine the most reliable and fresh status of each path.
+Users benefit from always-updated information, since \texttt{BBP} merges multiple contributions provided by different registered users to determine the most reliable and fresh status of each path.
 
-Guest Users have read-only access to all public information collected by the system and cannot record trips, validate anomalies, or store personal path histories. Their interaction with BBP mainly focuses on quickly retrieving reliable, up-to-date information about the best available routes for their ride.
+Generic users have read-only access to all public information collected by the system and cannot record trips, validate anomalies, or store personal path histories. Their interaction with \texttt{BBP} mainly focuses on quickly retrieving reliable and up-to-date information about the best available routes for their ride.
 
-\subsection{Registered User}
+\subsubsection{Registered User}
 
-A Registered User can access all the features available to Guest Users, but he can also access more advanced functionalities and actively contribute to the BBP system. In particular, he can record his trips and store them on the platform, keeping track of his cycling activity.
+A Registered User can access all the features available to the generic User, but he can also access more advanced functionalities and actively contribute to the \texttt{BBP} system. In particular, he can record his trips and store them on the platform, keeping track of his cycling activity and contributing to the public bike paths inventory.
 
 He can record his trips in two different ways:
 \begin{itemize}
-    \item \textbf{Manual mode}: by inserting manually the names of the streets belonging to a bike path and assigning a status to each segment (such as "optimal", "medium", "sufficient", "requires maintenance").
-    \item \textbf{Automatic mode}: letting BBP acquire data from their mobile devices, detecting when he starts cycling, collecting GPS data to reconstruct the followed path, and using accelerometer and gyroscope data to identify potential anomalies such as potholes. After the trip, the Registered User must confirm or reject the automatically detected anomalies within 24 h, before they become publishable.
+    \item \textbf{Manual mode}: by inserting manually the names of the streets belonging to a bike path and assigning a status to each street (such as \texttt{optimal}, \texttt{medium}, \texttt{sufficient} and \texttt{requires maintenance}).
+    \item \textbf{Automatic mode}: letting \texttt{BBP} acquire data from their mobile device sensors, detecting when he starts cycling, collecting GPS data to reconstruct the followed trajectory, and using accelerometer and gyroscope data to identify potential anomalies such as potholes. After the trip, the Registered User must confirm or reject the automatically detected anomalies within 72 h, before they become publishable, otherwise they will never be published.
 \end{itemize}
 
-A Registered User can review his personal cycling history, accessing stored trips enriched with statistics such as average speed, trip time and, when available, weather conditions at the time of recording.
+A Registered User can view his personal cycling history, accessing stored trips enriched with statistics such as average speed, trip time and weather conditions at the time of recording.
 
-When desired, he can publish one of his validated bike paths, including information such as total distance, estimated trip time, and the status), making it available to all other users.
+When desired, he can publish one of his validated bike paths, including information such as total distance, estimated trip time and the status, triggering the merge process into a public path and making its information available to all other users.
 
 \section{Assumptions, Dependencies and Constraints}
 \label{sec:assumptions}
@@ -97,76 +185,3 @@ When desired, he can publish one of his validated bike paths, including informat
 
     \item \textbf{[C.3] Regulatory Compliance}: The storage of geolocation data and user habits is subject to strict privacy regulations. The system must enforce explicit consent mechanisms for data tracking and sharing.
 \end{itemize}
-
-\section{Scenarios}
-\label{sec:scenarios}
-
-\begin{enumerate}
-    \item \textbf{Account registration}: Unregistered user Mario accesses the sign-up interface to create a profile. Upon successful validation of the provided credentials, the system grants the new user the "Registered" status, allowing him to access new functions reserved to Registered Users.
-
-    \item \textbf{User login}: The registered user Clara inputs his credentials in BBP which validates them and loads the user's personal session.
-
-    \item \textbf{Automated trip tracking}: The registered user Clara starts cycling; the system detects the biking speed and automatically starts the recording of the trip via GPS, removing the need for manual interactions to start or stop the activity.
-
-    \item \textbf{Anomaly validation}: After an automated trip, the user Clara reviews the data collected via sensors by BBP and confirms or rejects potential potholes or obstacles detected to prevent false positives from polluting the database.
-
-    \item \textbf{Deferred Trip Data Publishing}: The registered user Clara accesses her personal history to select a trip recorded and validated in the past (e.g, days or months earlier) to share the collected data with the community.
-
-    \item \textbf{Performance statistics review}: The registered user Clara accesses her personal dashboard to view the historical statistics for each past trip, including average speed and trip duration.
-
-    \item \textbf{Weather-enriched statistics}: The registered user Clara accesses her personal dashboard to review her performance on one of her past trips where BBP has automatically fetched and added meteorological information (e.g., wind speed and temperature).
-
-    \item \textbf{Manual Path Insertion}: The Registered User Paolo manually inserts information about a specific bike path by writing down road names and assigning them a status (e.g., "optimal", "requires maintenance") without physically travelling the route at that moment.
-
-    \item \textbf{Path search and routing and score based visualization}: The user Sofia (can be registered or not) enters an origin and a destination. BBP calculates and visualizes the available paths by connecting the two points on a map. When multiple routes exist for a search query, the user Sofia views them ranked by a "Path score" with real-time weather conditions.
-
-    \item \textbf{Path score and freshness calculation}: The registered user Paolo reports that a bike path in Via Venezia is "optimal." Two days later, another registered user Clara rides along the same path, and the system automatically detects bumps suggesting possible degradation. Shortly after, the registered user Sofia manually marks the same path as "requires maintenance." BBP collects all user contributions, compares their freshness, and resolves conflicting information, updating the path's status.
-\end{enumerate}
-
-\section{Class Diagram}
-\label{sec:class_diagram}
-
-The UML Class diagram represents a high level model of the mobile application described in this document. There are two kinds of users: RegisteredUser and its superclass User. Trip class represents a bike ride of a RegisteredUser, it can be an AutomaticTrip or a ManualTrip. Whenever a Trip is published by its creator, the system merges it with other Trip(s) from different RegisteredUser(s), contributing to the public Path, which can be searched, found and seen by User(s). The ManualTrip class has a list of streets, which are keyed in by the RegisteredUser. They are suddenly translated into GPSCoordinates by using an external MapService, also used for Street lookup and Path visualization. On the other hand, AutomaticTrip leverages the MobileSensors for directly obtaining GPSCoordinates and SensorReadings which are analyzed to find the Obstacle(s). Any Obstacle must be confirmed by the RegisteredUser recording the Trip before it can be published. Statistics depending on speed, such as average speed and trip time, are only recorded for AutomaticTrip. Weather conditions are provided by an external WeatherService and are used within Statistics since they can influence performance. Also User consults the WeatherService when it views a public Path.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=\textwidth]{class_diagram.png}
-    \caption{Class Diagram}
-    \label{fig:class_diagram}
-\end{figure}
-
-\section{State Diagrams}
-\label{sec:state_diagrams}
-
-\subsection{Path State Diagram}
-
-This state diagram shows how the status of a Path evolves as BBP receives publishable information from different Registered Users. When a path has no community data, it is in the "No Data" state. As soon as the first publishable Trip is merged, the Path enters one of the status states (e.g., "Optimal" or "Requires Maintenance"). Every time a new Trip about the same trajectory is published, the merging engine re-evaluates the status using freshness and the number of confirming contributions. If recent reports agree on a different status, the Path moves to the corresponding state (e.g., from "Optimal" to "Requires Maintenance"). When all reliable information indicates that the path can no longer be used, it moves to the "Permanently Closed" final state.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=0.8\textwidth]{path_state_diagram.png}
-    \caption{Path State Diagram}
-    \label{fig:path_state}
-\end{figure}
-
-\subsection{Manual Trip State Diagram}
-
-This state diagram describes the lifecycle of a ManualTrip. When a Registered User decides to insert a path manually, the trip enters the "Creating" state while the user specifies the list of streets and assigns a status to each segment. Once the trip is saved, it becomes part of the user's private history in the "Saved (Private)" state, and it can still be edited, going back to "Creating" if needed. When the user decides to share the collected information with the community, the trip moves to the "Published" state and contributes to public paths. At any time, the user may delete the trip, which moves it to the "Deleted" final state.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=0.8\textwidth]{manual_trip_state_diagram.png}
-    \caption{Manual Trip State Diagram}
-    \label{fig:manual_trip_state}
-\end{figure}
-
-\subsection{Automatic Trip State Diagram}
-
-This state diagram captures the evolution of an AutomaticTrip. While the user is not cycling, the trip is in the "Idle / Not Recording" state. When BBP detects biking activity through speed and motion sensors, or when the user explicitly starts automatic recording, the trip moves to the "Recording" state, where GPS coordinates and sensor readings are collected. When recording stops, if the system has detected potential obstacles, the trip enters the "Awaiting Validation" state: the Registered User has 24 hours to confirm or reject each obstacle. Once all obstacles are validated (or the timeout expires), the trip becomes "Ready to Publish". When the user chooses to share it with the community, the trip reaches the "Published" state and contributes to public path information; otherwise, the trip can be discarded, reaching the final "Discarded" state.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=\textwidth]{automatic_trip_state_diagram.png}
-    \caption{Automatic Trip State Diagram}
-    \label{fig:automatic_trip_state}
-\end{figure}

@@ -12,11 +12,11 @@
 \begin{itemize}
     \item \textbf{Sign Up/Login Page}: The system must include a Sign Up/Login page that allows Users to register and authenticate their credentials for accessing the platform. This functionality ensures secure access for registered users.
 
-    \item \textbf{Home Page and Search Bar}: The system must include a home page which has in the bottom buttons to access personal dashboard and profile management and in the top should have a search bar to insert origin and destination points of a trip.
+    \item \textbf{Home Page and Search Bar}: The system must provides a home page featuring a top-positioned search bar for specifying origin and destination points through either direct map selection or the two streets name entries. For registered users, the page includes buttons for initiating automated or manual trip recording sessions, and provides access to personal trip history through bottom-positioned navigation controls.
 
-    \item \textbf{Map interface}: When Users search a path, a map interface representing the possible paths, ordered by score, should be presented to the user. Users can tap on various paths and look at some details.
+    \item \textbf{Map interface}: When Users search a path, a map interface representing the possible paths, ordered by score, should be presented addto the user. Users can tap on various paths and look at some details.
 
-    \item \textbf{Dashboard}: The system must include a dashboard section where registered users can look at all their past registered trips and related statistics (e.g., total distance, trip time, average speed).
+    \item \textbf{History}: The system must include a history section where registered users can look at all their past registered trips and related statistics (total distance, trip time, average speed).
 \end{itemize}
 
 \subsection{Hardware Interfaces}
@@ -52,21 +52,21 @@ The application can be accessed through a stable internet connection to perform 
 \section{Functional Requirements}
 \label{sec:functional}
 
-\subsection{Sign up and log in}
+\subsubsection{Sign up and log in}
 
 \begin{itemize}
     \item \textbf{[R1]}: The system must allow an unregistered User to sign up
     \item \textbf{[R2]}: The system must allow registered Users to login
 \end{itemize}
 
-\subsection{Manual Trip Tracking}
+\subsubsection{Manual Trip Tracking}
 
 \begin{itemize}
     \item \textbf{[R3]}: The system must allow a Registered User to manually insert a bike path by listing the name and the status of each street comprising the path.
     \item \textbf{[R4]}: The system must store manually inserted paths in the User's private trip history.
 \end{itemize}
 
-\subsection{Automatic Trip Tracking}
+\subsubsection{Automatic Trip Tracking}
 
 \begin{itemize}
     \item \textbf{[R5]}: The system must allow a Registered User to automatically record a trip, using device sensors to detect when he starts and stops biking.
@@ -82,7 +82,7 @@ The application can be accessed through a stable internet connection to perform 
     \item \textbf{[R15]}: The system must allow a Registered User to publish a validated trip.
 \end{itemize}
 
-\subsection{Trip Storage and Personal Analytics}
+\subsubsection{Trip Storage and Personal Analytics}
 
 \begin{itemize}
     \item \textbf{[R16]}: The system must allow Registered Users to store all their recorded trips (manually or automatically).
@@ -90,7 +90,7 @@ The application can be accessed through a stable internet connection to perform 
     \item \textbf{[R18]}: The system must allow a Registered User to review the statistics related to a bike path, such as average speed, and other performance metrics.
 \end{itemize}
 
-\subsection{Path Search, Routing and Visualization}
+\subsubsection{Path Search, Routing and Visualization}
 
 \begin{itemize}
     \item \textbf{[R19]}: The system must allow any user to access published paths
@@ -102,82 +102,77 @@ The application can be accessed through a stable internet connection to perform 
     \item \textbf{[R25]}: The system shall query an external weather service to retrieve current weather conditions during the path search and display relevant warnings to the user.
 \end{itemize}
 
-\subsection{Merging \& Freshness-Based Status Aggregation}
+\subsubsection{Merging \& Freshness-Based Status Aggregation}
 
 \begin{itemize}
     \item \textbf{[R26]}: The system shall append historical weather data (temperature, wind speed and direction) to the trip logs of registered users for performance analysis.
     \item \textbf{[R27]}: The system must merge publishable information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions.
 \end{itemize}
 
-\section{Use Cases}
 \label{sec:use_cases}
-
 \subsection{Use Case Diagram}
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.9\textwidth]{use_case_diagram.png}
+    \includesvg[width=0.9\textwidth]{diagrams/use_cases_diagram.svg}
     \caption{Use Case Diagram}
     \label{fig:use_case_diagram}
 \end{figure}
 
-\subsection{Use Case Descriptions}
-
-\subsubsection{[UC1] - Sign Up}
+\subsection{Use Cases}
 
 \begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|l|X|}
-\hline
-\textbf{Participating Actors} & Guest User \\ \hline
-\textbf{Entry Conditions} & The Guest User is not authenticated and wants to become a Registered User \\ \hline
-\textbf{Flow of events} &
-\begin{enumerate}
-    \item The Guest User clicks on "sign up"
-    \item BBP displays the registration form
-    \item The User inputs email, username, password
-    \item The User clicks "create account"
-    \item BBP validates the input syntax
-    \item BBP creates a new profile in the database
-    \item BBP confirms creation and redirects to the Login Page
-\end{enumerate} \\ \hline
-\textbf{Exit Conditions} & The User has successfully created a new account. \\ \hline
-\textbf{Exceptions} &
-E-mail already in use: BBP notifies the User and suggests logging in
-
-E-mail not valid: BBP notifies the User and suggest correcting it \\ \hline
-\end{tabularx}
+    \centering
+    \begin{tabularx}{\textwidth}{|l|X|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{[UC1] - Sign Up}} \\ \hline
+        \textbf{Participating Actors} & \texttt{Guest User} \\ \hline
+        \textbf{Entry condition}      & The \texttt{Guest User} is not authenticated and wants to become a \texttt{Registered User}. \\ \hline
+        \textbf{Flow of events}       & 
+        \begin{enumerate}
+            \item The \texttt{Guest User} clicks on "sign up".
+            \item \texttt{BBP} displays the registration form.
+            \item The User inputs \texttt{Email}, \texttt{Username}, and \texttt{Password}.
+            \item The User clicks "create account".
+            \item \texttt{BBP} validates the input syntax.
+            \item \texttt{BBP} creates a new profile in the database.
+            \item \texttt{BBP} confirms creation and redirects to the \texttt{Login Page}.
+        \end{enumerate} \\ \hline
+        \textbf{Exceptions}           & 
+        \textbf{\texttt{Email} already in use:} \texttt{BBP} notifies the User and suggests logging in. \newline
+        \textbf{\texttt{Email} not valid:} \texttt{BBP} notifies the User and suggests correcting it. \\ \hline
+        \textbf{Exit conditions}      & The User has successfully created a new account. \\ \hline
+    \end{tabularx}
 \caption{Use Case 1: Sign Up}
 \label{tab:uc1}
 \end{table}
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.7\textwidth]{uc1_sequence.png}
+    \includegraphics[width=0.7\textwidth]{diagrams/uc1_sequence_diagrams.png}
     \caption{Sequence Diagram for UC1: Sign Up}
     \label{fig:uc1_sequence}
 \end{figure}
-
-\subsubsection{[UC2] - Log In}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User \\ \hline
-\textbf{Entry Conditions} & The Registered User is not currently authenticated \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC2] - Log In}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} is not currently authenticated. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User clicks on "login"
-    \item BBP displays the login form
-    \item The User inputs their credentials (email/username, password)
-    \item The User clicks the "login" button
-    \item BBP hashes the password and validates it against the database
-    \item BBP retrieves the user's profile and starts a session
-    \item BBP redirects the user to the Home Page
+    \item The User clicks on "login".
+    \item \texttt{BBP} displays the login form.
+    \item The User inputs their credentials (\texttt{Email}/\texttt{Username}, \texttt{Password}).
+    \item The User clicks the "login" button.
+    \item \texttt{BBP} hashes the \texttt{Password} and validates it against the database.
+    \item \texttt{BBP} retrieves the user's profile and starts a session.
+    \item \texttt{BBP} redirects the user to the \texttt{Home Page}.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & The User is authenticated and can access restricted features. \\ \hline
-\textbf{Exceptions} & Invalid Credentials: BBP displays an error message and invites the user to retry. \\ \hline
+\textbf{Exceptions}           & \textbf{Invalid Credentials:} \texttt{BBP} displays an error message and invites the user to retry. \\ \hline
+\textbf{Exit conditions}      & The User is authenticated and can access restricted features. \\ \hline
 \end{tabularx}
 \caption{Use Case 2: Log In}
 \label{tab:uc2}
@@ -190,33 +185,36 @@ E-mail not valid: BBP notifies the User and suggest correcting it \\ \hline
     \label{fig:uc2_sequence}
 \end{figure}
 
-\subsubsection{[UC3] - Record Trip Automatically}
-
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User, Mobile Sensors, Weather Service \\ \hline
-\textbf{Entry Conditions} & The Registered User is ready to automatically record his biking activity \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC3] - Record Trip Automatically}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User}, \texttt{Mobile Sensors}, \texttt{Weather Service} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} is ready to automatically record his biking activity. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item User clicks on "Start automatic recording"
-    \item BBP enters detection mode and starts monitoring GPS speed
-    \item BBP detects biking activity (speed > threshold)
-    \item BBP starts the recording session
-    \item BBP continuously logs GPS coordinates and timestamps (trajectory)
-    \item BBP monitors accelerometer/gyroscope for anomalies (e.g., potholes)
-    \item [Alt: speed < threshold] BBP pauses data acquisition and returns to step 2
-    \item User presses "End Automatic Record" button
-    \item BBP stores the detailed raw data (GPS, trajectory, timestamps)
-    \item BBP retrieves the historical meteorological data from the Weather Service and link it with the trip
-    \item BBP analyzes sensors data to identify potholes and stores them as PENDING
-    \item BBP calculates the specific statistics (total distance, average speed, and duration) and stores them
-    \item BBP saves the trip locally
-    \item BBP synchronizes the trip with the server
+    \item User clicks on "Start automatic recording".
+    \item \texttt{BBP} enters detection mode and starts monitoring \texttt{GPS speed}.
+    \item \texttt{BBP} detects biking activity (\texttt{speed} > \texttt{threshold}).
+    \item \texttt{BBP} starts the recording session.
+    \item \texttt{BBP} continuously logs \texttt{GPS coordinates} and \texttt{timestamps} (\texttt{trajectory}).
+    \item \texttt{BBP} monitors \texttt{accelerometer}/\texttt{gyroscope} for anomalies (e.g., potholes).
+    \item User presses "End Automatic Record" button.
+    \item \texttt{BBP} stores the detailed raw data (\texttt{GPS}, \texttt{trajectory}, \texttt{timestamps}).
+    \item \texttt{BBP} retrieves historical meteorological data from the \texttt{Weather Service} and links it with the trip.
+    \item \texttt{BBP} analyzes \texttt{sensors} data to identify potholes and stores them as \texttt{PENDING}.
+    \item \texttt{BBP} calculates the specific statistics (\texttt{total distance}, \texttt{average speed}, and \texttt{duration}) and stores them.
+    \item \texttt{BBP} saves the trip locally.
+    \item \texttt{BBP} synchronizes the trip with the server.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & A new trip is recorded with its potholes, statistics and weather conditions \\ \hline
-\textbf{Exceptions} & Connectivity Loss: BBP buffers data locally until connection is restored. \\ \hline
+\textbf{Alternative Flows}    & 
+\textbf{\texttt{Alternative 1}: Automatic Pause and Resume} \newline
+1. If \texttt{speed} drops below \texttt{threshold} during Step 5, \texttt{BBP} pauses data acquisition. \newline
+2. \texttt{BBP} continues monitoring \texttt{GPS speed} in the background. \newline
+3. When \texttt{speed} exceeds \texttt{threshold} again, \texttt{BBP} resumes the recording session and returns to Step 5. \\ \hline
+\textbf{Exceptions}           & \textbf{Connectivity Loss:} \texttt{BBP} buffers data locally until connection is restored. \\ \hline
+\textbf{Exit conditions}      & A new trip is recorded with its potholes, statistics, and weather conditions. \\ \hline
 \end{tabularx}
 \caption{Use Case 3: Record Trip Automatically}
 \label{tab:uc3}
@@ -229,34 +227,37 @@ E-mail not valid: BBP notifies the User and suggest correcting it \\ \hline
     \label{fig:uc3_sequence}
 \end{figure}
 
-\subsubsection{[UC4] - Record Trip Manually}
-
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User, Map Service \\ \hline
-\textbf{Entry Conditions} & The Registered User is ready to manually insert trip information \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC4] - Record Trip Manually}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User}, \texttt{Map Service} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} is ready to manually insert trip information. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The user selects "Manual Record"
-    \item BBP presents a form to insert a street name
-    \item [Loop] The user specifies a street name
+    \item The user selects "Manual Record".
+    \item \texttt{BBP} presents a form to insert trip details.
+    \item \textbf{Loop} for adding streets to the trip:
     \begin{enumerate}
-        \item The BBP queries the Map Service with provided street name
-        \item The BBP displays found streets to the user
-        \item Registered User selects one of the found streets
-        \item [End Loop] BBP add the chosen street to the trip
+        \item The user specifies a street name.
+        \item \texttt{BBP} queries the \texttt{Map Service} with the provided street name.
+        \item \texttt{BBP} displays the found streets to the user.
+        \item The user selects one of the found streets.
+        \item The user selects a \texttt{path status} for the street: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
+        \item \texttt{BBP} adds the chosen street and its associated status to the trip entry.
     \end{enumerate}
-    \item The user submits the form
-    \item BBP confirms the submission
-    \item BBP saves the data
+    \item The user submits the form.
+    \item \texttt{BBP} queries the \texttt{Map Service} to retrieve the \texttt{GPS coordinates} for each selected street.
+    \item \texttt{BBP} identifies the intersections between each pair of sequential streets.
+    \item \texttt{BBP} computes the \texttt{total distance} of the path.
+    \item \texttt{BBP} confirms the submission.
+    \item \texttt{BBP} saves the data.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & A new manual trip is recorded \\ \hline
-\textbf{Exceptions} &
-Invalid Location: The system cannot identify the street provided. abort
-
-Map Service is unavailable: BBP shows an error regarding the map service and cancel the operation suggesting trying again later \\ \hline
+\textbf{Exceptions}           & 
+\textbf{Invalid Location:} The system cannot identify the street provided; operation aborted. \newline
+\textbf{Map Service Unavailable:} \texttt{BBP} shows an error and cancels the operation. \\ \hline
+\textbf{Exit conditions}      & A new manual trip is recorded, including calculated \texttt{total distance} and street-specific statuses. \\ \hline
 \end{tabularx}
 \caption{Use Case 4: Record Trip Manually}
 \label{tab:uc4}
@@ -269,32 +270,38 @@ Map Service is unavailable: BBP shows an error regarding the map service and can
     \label{fig:uc4_sequence}
 \end{figure}
 
-\subsubsection{[UC5] - Validate Obstacle}
-
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User, Map Service \\ \hline
-\textbf{Entry Conditions} & The registered user is on its personal history page and is ready to validate an automatically recorded Trip \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC5] - Validate Obstacle}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User}, \texttt{Map Service} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} is on their personal history page and is ready to validate an automatically recorded trip. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The Registered User chooses one of its automatically recorded private trips
-    \item BBP highlights potential selected trip's anomalies on the map
-    \item The user reviews a specific anomaly
-    \item [Alt] The user confirms the detection
+    \item The \texttt{Registered User} chooses one of their automatically recorded private trips.
+    \item \texttt{BBP} highlights potential anomalies of the selected trip on the map interface.
+    \item \textbf{Loop} for each identified \texttt{}{PENDING} anomaly:
     \begin{enumerate}
-        \item [Alt] The BBP updates pothole status to CONFIRMED
+        \item \texttt{BBP} displays the details and location of a specific anomaly.
+        \item The User reviews the anomaly.
+        \item The User chooses a validation action: \texttt{Alternative 1} or \texttt{Alternative 2}.
     \end{enumerate}
-    \item [Alt2] The user rejects the detection
-    \begin{enumerate}
-        \item [Alt2] The BBP updates pothole status to REJECTED
-    \end{enumerate}
-    \item BBP updates the trip accordingly
-    \item The user saves the validated trip
+    \item \texttt{BBP} displays a summary of the validation results for all reviewed anomalies.
+    \item \texttt{BBP} prompts the User to select a \texttt{path status} for the trip segments.
+    \item The User selects the \texttt{path status} from: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
+    \item The User saves the validated trip.
+    \item \texttt{BBP} updates the trip data in the database.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & Trip obstacles are validated and trip is ready to for optional publication \\ \hline
-\textbf{Exceptions} & \\ \hline
+\textbf{Alternative Flows}    & 
+\textbf{\texttt{Alternative 1}: Confirm Detection} \newline
+1. The User confirms the anomaly detection. \newline
+2. \texttt{BBP} updates the pothole status to \texttt{CONFIRMED}. \newline
+\textbf{\texttt{Alternative 2}: Reject Detection} \newline
+1. The User rejects the anomaly detection. \newline
+2. \texttt{BBP} updates the pothole status to \texttt{REJECTED}. \\ \hline
+\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} shows an error regarding the map rendering and prompts the user to try the validation later. \\ \hline
+\textbf{Exit conditions}      & Trip obstacles are validated, a \texttt{path status} is assigned, and the trip is ready for optional publication. \\ \hline
 \end{tabularx}
 \caption{Use Case 5: Validate Obstacle}
 \label{tab:uc5}
@@ -307,26 +314,26 @@ Map Service is unavailable: BBP shows an error regarding the map service and can
     \label{fig:uc5_sequence}
 \end{figure}
 
-\subsubsection{[UC6] - Publish Trip}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User \\ \hline
-\textbf{Entry Conditions} & The registered user has at least one private trip ready to publish \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC6] - Publish Trip}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} has at least one \texttt{private} trip ready to publish. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The user selects a private trip from his history
-    \item The user clicks "publish"
-    \item BBP changes the trip status to "public"
-    \item BBP anonymizes trip data
-    \item BBP triggers the Data Merging algorithm to integrate anonymized data with already existing data (considering freshness/confirmations)
-    \item BBP updates the global path score
-    \item BBP confirms publication
+    \item The User selects a \texttt{private} trip from their history.
+    \item The User clicks the "publish" button.
+    \item \texttt{BBP} changes the trip status to \texttt{public}.
+    \item \texttt{BBP} anonymizes the trip data to protect user privacy.
+    \item \texttt{BBP} triggers the \texttt{Data Merging algorithm} to integrate anonymized data with existing datasets (considering freshness and confirmations).
+    \item \texttt{BBP} updates the \texttt{global path score} based on the new data.
+    \item \texttt{BBP} confirms the successful publication to the User.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & Trip data has been integrated in public path and it's available to all users \\ \hline
-\textbf{Exceptions} & \\ \hline
+\textbf{Exceptions}           & None. \\ \hline
+\textbf{Exit conditions}      & Trip data has been integrated into the public path and is available to all users. \\ \hline
 \end{tabularx}
 \caption{Use Case 6: Publish Trip}
 \label{tab:uc6}
@@ -339,24 +346,24 @@ Map Service is unavailable: BBP shows an error regarding the map service and can
     \label{fig:uc6_sequence}
 \end{figure}
 
-\subsubsection{[UC7] - View Private Trip}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User, Map Service \\ \hline
-\textbf{Entry Conditions} & The registered user has recorded at least one trip and wants to view it in details \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC7] - View Private Trip}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User}, \texttt{Map Service} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} has recorded at least one trip and wants to view it in detail. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The user clicks on "My Trips"
-    \item BBP displays the list of the Registered User trips over time
-    \item The user selects a specific trip from his history list
-    \item BBP fetches map data about chosen trip's coordinates
-    \item BBP displays a detailed view showing trip trajectory on the map, computed statistics, found/confirmed potholes and weather conditions faced during the ride
+    \item The User clicks on "My Trips".
+    \item \texttt{BBP} displays the list of the \texttt{Registered User} trips recorded over time.
+    \item The User selects a specific trip from their history list.
+    \item \texttt{BBP} queries the \texttt{Map Service} to fetch map data corresponding to the chosen trip's \texttt{GPS coordinates}.
+    \item \texttt{BBP} displays a detailed view including the trip \texttt{trajectory} on the map, computed statistics, found/confirmed potholes, and the weather conditions recorded during the ride.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & The user successfully visualizes the detailed trip performance and context of a single specific trip \\ \hline
-\textbf{Exceptions} & Map Service is unavailable: BBP shows an error regarding the map but still shows all other things \\ \hline
+\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} displays an error notification regarding the map interface but continues to display the text-based statistics and metadata. \\ \hline
+\textbf{Exit conditions}      & The User successfully visualizes the detailed performance and environmental context of a single specific trip. \\ \hline
 \end{tabularx}
 \caption{Use Case 7: View Private Trip}
 \label{tab:uc7}
@@ -369,36 +376,35 @@ Map Service is unavailable: BBP shows an error regarding the map service and can
     \label{fig:uc7_sequence}
 \end{figure}
 
-\subsubsection{[UC8] - Delete Private Trip}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Registered User \\ \hline
-\textbf{Entry Conditions} & The registered user has recorded at least one trip and wants to delete it \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC8] - Delete Private Trip}} \\ \hline
+\textbf{Participating Actors} & \texttt{Registered User} \\ \hline
+\textbf{Entry condition}      & The \texttt{Registered User} has recorded at least one trip and wants to delete it. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The registered user clicks on "My Trips"
-    \item BBP displays the list of the user trips over time
-    \item The user keeps pressed on a specific trip from his history list
-    \item BBP shows an additional in-context menu
-    \item The user selects the "Delete" option
-    \item BBP ask for confirmation
-    \item [Alt] The user confirm the operation
-    \begin{enumerate}
-        \item [Alt] BBP deletes the selected Trip from User history
-    \end{enumerate}
-    \item [Alt] The user cancels the operation
-    \begin{enumerate}
-        \item [Alt] BBP aborts the operation and displays the user trips history
-    \end{enumerate}
+    \item The User clicks on "My Trips".
+    \item \texttt{BBP} displays the list of the user trips recorded over time.
+    \item The User long-presses on a specific trip from the history list.
+    \item \texttt{BBP} displays an additional in-context menu.
+    \item The User selects the "Delete" option.
+    \item \texttt{BBP} displays a confirmation prompt.
+    \item The User confirms the operation.
+    \item \texttt{BBP} deletes the selected trip from the user history.
+    \item \texttt{BBP} confirms the deletion.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & Trip is removed from the registered user's private history. If previously published, anonymized data remains in aggregated PATH information. \\ \hline
-\textbf{Exceptions} &
-Invalid Location: The system cannot identify the street provided. abort
-
-Map Service is unavailable: BBP shows an error regarding the map service and cancel the operation suggesting trying again later \\ \hline
+\textbf{Alternative Flows}    & 
+\textbf{\texttt{Alternative 1}: User Cancels Deletion} \newline
+1. At Step 7 of the \texttt{Flow of events}, the User cancels the operation. \newline
+2. \texttt{BBP} aborts the deletion process. \newline
+3. \texttt{BBP} returns the User to the history list without making changes. \\ \hline
+\textbf{Exceptions}           & 
+\textbf{Invalid Selection:} The system cannot identify the selected trip; operation aborted. \newline
+\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} displays an error regarding map-related trip data but allows deletion of the database record. \\ \hline
+\textbf{Exit conditions}      & The trip is removed from the \texttt{Registered User}'s private history. If previously published, the anonymized data remains in the aggregated \texttt{PATH} information. \\ \hline
 \end{tabularx}
 \caption{Use Case 8: Delete Private Trip}
 \label{tab:uc8}
@@ -411,38 +417,48 @@ Map Service is unavailable: BBP shows an error regarding the map service and can
     \label{fig:uc8_sequence}
 \end{figure}
 
-\subsubsection{[UC9] - Search Path}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Any User (Guest/Registered), Map Service \\ \hline
-\textbf{Entry Conditions} & The User is ready to search paths between two points \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC9] - SearchPath}} \\ \hline
+\textbf{Participating Actors} & \texttt{Any User} (Guest/Registered), \texttt{Map Service} \\ \hline
+\textbf{Entry condition}      & The User is ready to search paths between two points. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The user clicks on the search bar
-    \item BBP displays search form
-    \item [Loop for Origin and Destination endpoints]
+    \item The user clicks on the search bar.
+    \item \texttt{BBP} displays the search form with map interface.
+    \item \textbf{Loop} for \texttt{Origin} and \texttt{Destination} endpoints:
     \begin{enumerate}
-        \item The user enters endpoint street name
-        \item BBP queries the Map Service with provided street name
-        \item BBP displays found streets to the user
-        \item The User selects one of the found streets
-        \item BBP add selected street as endpoint value
+        \item The user chooses input method: \texttt{Alternative 1} or \texttt{Alternative 2}.
+        \item \texttt{BBP} adds the selected location as the endpoint value.
     \end{enumerate}
-    \item [End Loop]
-    \item BBP searches paths with provided endpoints
-    \item BBP ranks the found paths by previously computed/updated score
-    \item BBP shows the ranked list of paths to the user
+    \item \texttt{BBP} searches for paths with the provided endpoints.
+    \item \texttt{BBP} ranks the found paths by the previously computed/updated score.
+    \item \texttt{BBP} shows the ranked list of paths to the user.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & User is shown of available paths ready to be viewed in details \\ \hline
-\textbf{Exceptions} &
-Invalid Location: The system cannot identify the street provided. abort
-
-Map Service is unavailable: BBP shows an error regarding the map service and cancel the operation suggesting trying again later
-
-No Paths Found: BBP shows an error message saying "Path not found" and await for the user to return back or changing query \\ \hline
+\textbf{Alternative Flows}    & 
+\textbf{\texttt{Alternative 1}: Text Search}
+\begin{enumerate}
+    \item The user enters an endpoint street name.
+    \item \texttt{BBP} queries the \texttt{Map Service} with the provided street name.
+    \item \texttt{BBP} displays the found streets to the user.
+    \item The user selects one of the found streets.
+\end{enumerate}
+\textbf{\texttt{Alternative 2}: Map Selection}
+\begin{enumerate}
+    \item The user clicks/taps on a point on the map.
+    \item \texttt{BBP} queries the \texttt{Map Service} to identify the location.
+    \item \texttt{BBP} displays the address/location of the selected point.
+    \item The user confirms the selection.
+\end{enumerate} \\ \hline
+\textbf{Exceptions}           & 
+\textbf{Invalid Location:} The system cannot identify the point; operation aborted. \newline
+\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} shows an error and suggests trying later. \newline
+\textbf{No Paths Found:} \texttt{BBP} displays "Path not found" message. 
+\\ \hline
+\textbf{Exit conditions}      & User is shown available paths ready to be viewed in details. \\ \hline
 \end{tabularx}
 \caption{Use Case 9: Search Path}
 \label{tab:uc9}
@@ -455,26 +471,25 @@ No Paths Found: BBP shows an error message saying "Path not found" and await for
     \label{fig:uc9_sequence}
 \end{figure}
 
-\subsubsection{[UC10] - Visualize Path}
 
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\textbf{Participating Actors} & Any User (Guest/Registered), Map Service, Weather Service \\ \hline
-\textbf{Entry Conditions} & The User has searched paths between two points and has chosen one listed option \\ \hline
-\textbf{Flow of events} &
+\multicolumn{2}{|c|}{\textbf{[UC10] - Visualize Path}} \\ \hline
+\textbf{Participating Actors} & \texttt{Any User} (Guest/Registered), \texttt{Map Service}, \texttt{Weather Service} \\ \hline
+\textbf{Entry condition}      & The User has searched paths between two points and has chosen one listed option. \\ \hline
+\textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The user clicks on one path in the search results list
-    \item BBP fetches map data about chosen path's coordinates
-    \item BBP queries external Weather Service about current conditions along the chosen path
-    \item BBP displays a detailed view showing path trajectory on the map, aggregated statistics (average time, total distance and status), confirmed potholes and current weather conditions along the path
+    \item The User clicks on one path in the search results list.
+    \item \texttt{BBP} queries the \texttt{Map Service} to fetch map data and \texttt{GPS coordinates} for the chosen path.
+    \item \texttt{BBP} queries the \texttt{Weather Service} for current environmental conditions along the selected path.
+    \item \texttt{BBP} displays a detailed view showing the path \texttt{trajectory} on the map, aggregated statistics (\texttt{average time}, \texttt{total distance}, and \texttt{status}), confirmed potholes, and current weather conditions along the path.
 \end{enumerate} \\ \hline
-\textbf{Exit Conditions} & User is shown of path on the map, its aggregated statistics and current weather conditions \\ \hline
-\textbf{Exceptions} &
-Weather Service is not available: BBP shows an error regarding weather conditions but still loads everything else
-
-Map Service is unavailable: BBP shows an error regarding the map but still shows all other things \\ \hline
+\textbf{Exceptions}           & 
+\textbf{\texttt{Weather Service} Unavailable:} \texttt{BBP} displays an error notification regarding the weather data but continues to load the map and statistics. \newline
+\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} displays an error regarding the map interface but still shows all text-based statistics and metadata. \\ \hline
+\textbf{Exit conditions}      & The User is shown the path on the map interface along with its aggregated statistics and current weather conditions. \\ \hline
 \end{tabularx}
 \caption{Use Case 10: Visualize Path}
 \label{tab:uc10}
