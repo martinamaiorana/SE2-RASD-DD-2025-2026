@@ -1,0 +1,107 @@
+% RASD Template - Politecnico di Milano
+% Software Engineering 2 - MSc in Computer Science
+% Modular version - Organized in multiple files and folders
+
+\documentclass[12pt,a4paper,oneside]{book}
+
+%------------------------------------------------------------------------------
+% CONFIGURATION FILES
+%------------------------------------------------------------------------------
+\input{config/packages}
+\input{config/colors}
+\input{config/formatting}
+\input{config/metadata}
+
+%------------------------------------------------------------------------------
+% BEGIN DOCUMENT
+%------------------------------------------------------------------------------
+\begin{document}
+
+\fancypagestyle{plain}{%
+\fancyhf{}
+\fancyhead[RO,RE]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+%------------------------------------------------------------------------------
+% FRONTMATTER
+%------------------------------------------------------------------------------
+\pagestyle{empty}
+\frontmatter
+
+\input{frontmatter/titlepage}
+\input{frontmatter/revision}
+
+%------------------------------------------------------------------------------
+% MAIN CONTENT
+%------------------------------------------------------------------------------
+\addtocontents{toc}{\vspace{2em}}
+\mainmatter
+
+\let\latexchapter\chapter
+\renewcommand{\chapter}{\cleardoublepage\phantomsection\latexchapter}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO, RE]{\textbf{\textcolor{bluepoli}{\thechapter\hsp\textcolor{bluepoli}{|   }\hsp \leftmark}}}
+\fancyhead[LE, RO]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%------------------------------------------------------------------------------
+% CHAPTERS
+%------------------------------------------------------------------------------
+\input{chapters/01_introduction}
+\input{chapters/02_overall_description}
+\input{chapters/03_specific_requirements}
+\input{chapters/04_formal_analysis}
+\input{chapters/05_effort_spent}
+\input{chapters/06_ai_usage}
+
+\chapter{References}
+
+This project utilized various tools and platforms for design, development, and analysis:
+
+\begin{itemize}
+    \item \textbf{GitHub} \\
+    \url{https://www.github.com/} \\
+    Version control and code repository management.
+    
+    \item \textbf{Class Diagram} \\
+    Created using Lucidchart (\url{https://lucid.app}) \\
+    Object-oriented design and system architecture visualization.
+    
+    \item \textbf{State Charts} \\
+    Created using Lucidchart (\url{https://lucid.app}) \\
+    State machine modeling and behavior specification.
+    
+    \item \textbf{Use Case Diagrams} \\
+    Created using Lucidchart (\url{https://lucid.app}) \\
+    System functionality and user interaction modeling.
+    
+    \item \textbf{Sequence Diagrams} \\
+    Created using Draw.io (\url{https://www.drawio.com}) \\
+    Process flow and interaction visualization.
+    
+    \item \textbf{Alloy Analyzer} \\
+    \url{https://alloytools.org} \\
+    Formal specification and verification tool.
+\end{itemize}
+
+\section*{Note}
+All diagrams and designs were created using industry-standard tools to ensure professional quality and maintainability of the project documentation.
+
+%------------------------------------------------------------------------------
+% BIBLIOGRAPHY (if needed)
+%------------------------------------------------------------------------------
+% \addtocontents{toc}{\vspace{2em}}
+% \bibliography{RASD_bibliography}
+
+%------------------------------------------------------------------------------
+% APPENDICES
+%------------------------------------------------------------------------------
+\cleardoublepage
+\addtocontents{toc}{\vspace{2em}}
+
+\cleardoublepage
+
+\end{document}

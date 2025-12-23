@@ -1,0 +1,27 @@
+// ManualTrip cannot be Published without passing through ReadyToPublish
+assert manualTripPublishRequiresReady {
+  all mt: ManualTrip | always (mt.mState = mPublished implies once (mt.mState = mReadyToPublish))
+}
+
+// AutomaticTrip cannot be Published if any pending obstacle exists
+assert noPublishWithPendingObstacles {
+  all at: AutomaticTrip | always (
+    at.aState = aPublished implies
+      no o: Obstacle | o.trip = at and o.oStatus = Pending
+  )
+}
+
+// If a Path is PermanentlyClosed, it never changes status
+assert permanentlyClosedIsAbsorbing {
+  all p: Path | always (p.status = PermanentlyClosed implies after always (p.status = PermanentlyClosed))
+}
+
+// Deleting a trip cannot remove its anonymized contribution (log)
+assert deletionDoesNotUndoPublication {
+  all t: Trip |
+    once (
+      (t in ManualTrip and t.(ManualTrip <: mState) = mPublished) or
+      (t in AutomaticTrip and t.(AutomaticTrip <: aState) = aPublished)
+    )
+    implies always (some e: Publication | e.source = t)
+}

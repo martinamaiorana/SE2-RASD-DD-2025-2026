@@ -1,0 +1,30 @@
+pred majorityMergeUpdatesStatus {
+  #RegisteredUser = 3
+  #Path = 1
+  #ManualTrip = 3
+  #AutomaticTrip = 0
+  #Obstacle = 0
+  #Publication = 3
+
+  one p: Path |
+
+    // Otherwise PermanentlyClosed is absorbing and blocks any update
+    always (p.status != PermanentlyClosed) and
+
+    // All trips refer to the same path
+    all mt: ManualTrip | mt.about = p and
+
+    // Two report Optimal, one reports RequiresMaintenance
+    some disj mt1, mt2, mt3: ManualTrip |
+      mt1.reportedStatus = Optimal and
+      mt2.reportedStatus = Optimal and
+      mt3.reportedStatus = RequiresMaintenance and
+
+    // All become published (so their publications appear in the log)
+    eventually (mt1.mState = mPublished and mt2.mState = mPublished and mt3.mState = mPublished) and
+
+    // Eventually the Path is created AND its status reflects the majority 
+    eventually (p.lifecycle != NonExistent and p.status = Optimal)
+}
+
+run majorityMergeUpdatesStatus for 7 steps

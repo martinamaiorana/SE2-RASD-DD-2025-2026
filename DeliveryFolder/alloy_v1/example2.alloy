@@ -1,0 +1,36 @@
+pred autoTripValidationThenPublish {
+  
+  #RegisteredUser = 1
+  #ManualTrip = 0
+  #AutomaticTrip = 1
+  #Path = 1
+  #Publication = 1
+  #Obstacle = 1
+
+  one u: RegisteredUser |
+  one at: AutomaticTrip |
+  one p: Path |
+  one o: Obstacle |
+  {
+    at.owner = u
+    at.about = p
+    at in u.recorded
+
+    o.trip = at
+
+    // At some point we are awaiting validation --> obstacle must be pending 
+    eventually (at.aState = aAwaitingValidation and o.oStatus = Pending)
+
+    // Later the obstacle is no longer pending (confirmed or rejected)
+    eventually (o.oStatus = Confirmed or o.oStatus = Rejected)
+
+    // Then the trip can become ready to publish (and, later, published)
+    eventually (at.aState = aReadyToPublish)
+    eventually (at.aState = aPublished)
+
+    // When published, a publication exists and is in the public log
+    eventually (some pubOf[at] and pubOf[at] in PubLog.entries)
+  }
+}
+
+run autoTripValidationThenPublish for 10
