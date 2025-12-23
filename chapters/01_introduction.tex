@@ -21,8 +21,8 @@ The system aggregates identical paths submitted by multiple users, using metrics
 \begin{itemize}
     \item \textbf{[G1]}: A registered user aims to record its cycling trips
     \item \textbf{[G2]}: A registered user wants to access their previously recorded bike trips
-    \item \textbf{[G3]}: A registered user aims to receive statistics about its past trips, including average speed, trip time and, when available, meteorological conditions (at recording time)
-    \item \textbf{[G4]}: A registered user wants to share information about a bike path it has recorded, including their status and the presence of obstacles, making this information available to the community (all users)
+    \item \textbf{[G3]}: A registered user aims to receive statistics about its past trips, including average speed, trip time and meteorological conditions (at recording time)
+    \item \textbf{[G4]}: A registered user wants to share information about a bike trip it has recorded, including their status and the presence of obstacles, making this information available to the community (all users)
     \item \textbf{[G5]}: A User wants to search for bike paths given an origin and a destination point and visualize results on both a map
     \item \textbf{[G6]}: A User wants to retrieve up to date information about bike paths, their status and current weather conditions
 \end{itemize}
@@ -116,6 +116,8 @@ The system aggregates identical paths submitted by multiple users, using metrics
     \item \textbf{Trip status}: The maintenance condition detected or validated for a user trip, based on sensor data analysis (potholes) or manual insertion.
     \item \textbf{Path status}: The aggregated maintenance condition of a bike path, computed by the \texttt{BBP} system whenever a new trip is published and merged. The calculation considers the status of all merged trips, weighing factors such as data freshness and consensus among multiple users' reports (e.g., if two trips report "optimal" and one reports "requires maintenance" within the same timeframe, the path is considered "optimal").
     \item \textbf{Path score}: A quality metric used to rank and visualize bike paths, calculated based on the path's status and its effectiveness in connecting origin to destination (measured through average trip duration).
+    \item \textbf{Corresponding Path (to a Trip)}: The path that shares the same trajectory (ordered set of GPS coordinates) as a given trip.
+    \item \textbf{Trip Merging Timeframe}: The time window within which trip reports are considered for consensus-based status aggregation during the path merging process.
 \end{itemize}
 
 \subsection{Acronyms}

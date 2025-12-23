@@ -49,13 +49,13 @@ The \texttt{UML} Class diagram below represents a high level model of the mobile
 Whenever a \texttt{Trip} is published by its creator, the system anonymizes and merges it with other \texttt{Trip}(s) from different \texttt{RegisteredUser}(s), contributing to the public \texttt{Path}, which can be searched, found and seen on map by \texttt{User}(s). 
 \\\\
 The \texttt{ManualTrip} class has a list of streets, which are inserted by the \texttt{RegisteredUser}. They are suddenly translated into \texttt{GPSCoordinates} by using an external \texttt{MapService}, also used for \texttt{Street} lookup and \texttt{Path} visualization. \\
-On the other hand, \texttt{AutomaticTrip} leverages the \texttt{MobileSensors} for directly obtaining \texttt{GPSCoordinates} and \texttt{SensorReadings} which are analyzed to find the \texttt{Obstacle}(s). Any \texttt{Obstacle} must be confirmed by the \texttt{RegisteredUser} recording the \texttt{Trip} before it can be published.
+On the other hand, \texttt{AutomaticTrip} leverages the \texttt{MobileSensors} for directly obtaining \texttt{GPSCoordinates} and \texttt{SensorReadings} which are analyzed to find the \texttt{Obstacle}(s). Any \texttt{Obstacle} must be confirmed by the \texttt{RegisteredUser} recording the \texttt{Trip} before it can be published. \texttt{Obstacle}s can be aggregated into \texttt{Path} during the merge of multiple \texttt{Trip}s
 \\\\
 \texttt{Statistics} depending on speed, such as average speed and trip time, are only recorded for \texttt{AutomaticTrip}. \texttt{Weather} forecasts are provided by an external \texttt{WeatherService} and are used within \texttt{Statistics} since they can influence performance. Also, any \texttt{User} consults the \texttt{WeatherService} when it views a public \texttt{Path}.
 
 \begin{figure}[H]
     \centering
-    \includesvg[width=\textwidth]{diagrams/class_diagram_inv.svg}
+    \includesvg[width=\textwidth]{diagrams/class_diagram.svg}
     \caption{Class Diagram}
     \label{fig:class_diagram}
 \end{figure}
@@ -66,7 +66,8 @@ On the other hand, \texttt{AutomaticTrip} leverages the \texttt{MobileSensors} f
 \subsubsection{Path}
 
 This state diagram shows how the status of a \texttt{Path} evolves as \texttt{BBP} receives already-anonymized publishable information from different Registered Users. When a first \texttt{Trip} is published and has no corresponding \texttt{Path}, an instance is created, corresponding to the \texttt{CREATED} state. Once the first published \texttt{Trip} is merged, during the \texttt{MERGE\_DATA} stage, the \texttt{Path} enters one of the status states (e.g., \texttt{OPTIMAL} or \texttt{REQUIRES\_MAINTENANCE}).\\
-When one or more \texttt{Trip}(s) referring to the same path are published, their information is merged into the corresponding \texttt{Path}. The \texttt{Path} status reflects the status of the most recently published \texttt{Trip}. If more than two \texttt{Trip}(s) referring to the same \texttt{Path} are published in the same timeframe window, the Path status is determined by majority voting among their reported statuses. 
+When one or more \texttt{Trip}(s) corresponding to the same path are published, their information is merged into the corresponding \texttt{Path}. The \texttt{Path} status reflects the status of the most recently published \texttt{Trip}. If more than two \texttt{Trip}(s) referring to the same \texttt{Path} are published in the same timeframe window, the Path status is determined by majority voting among their reported statuses. If \texttt{BBP} couldn't find a strict majority, it keeps the previous status. Also, during the merge process, \texttt{BBP} aggregates obstacles from incoming trips into the path.
+
 \texttt{Trip} then moves to the newly computed path status corresponding state \\
 When all reliable information indicates that the path can no longer be used, it moves to the \texttt{PERMANENTLY\_CLOSED} final state. As the new status, also the new path score is recomputed during the \texttt{MERGE\_DATA} state.
 
@@ -164,6 +165,9 @@ When desired, he can publish one of his validated bike paths, including informat
     \item \textbf{[D.1.2] Biking Speed Distinctiveness}: It is assumed that the speed and the acceleration of a user cycling are mathematically distinguishable from those of walking, running or driving a car, enabling the Automated Mode to function correctly without explicit user triggers.
 
     \item \textbf{[D.1.3] User Trustworthiness}: Given the community-based nature of the data, it is assumed that Registered Users will generally provide truthful validations regarding obstacles and path status.
+
+    \item \textbf{[D.1.4] Obstacle Detection}: If different Automatic Trips corresponding to the same Path detect the same obstacle, we assume that the obstacle has the same coordinates in both trips.
+    
 \end{itemize}
 
 \subsection{Dependencies}

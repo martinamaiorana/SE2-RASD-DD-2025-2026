@@ -69,15 +69,15 @@ The application can be accessed through a stable internet connection to perform 
 \subsubsection{Automatic Trip Tracking}
 
 \begin{itemize}
-    \item \textbf{[R5]}: The system must allow a Registered User to automatically record a trip, using device sensors to detect when he starts and stops biking.
-    \item \textbf{[R6]}: The system must automatically identify the start of a Registered User's biking activity and initiate the recording process.
+    \item \textbf{[R5]}: The system must allow a Registered User to automatically record a trip, using device sensors
+    \item \textbf{[R6]}: The system must automatically pause recording when the user stops cycling and resume when cycling activity is detected again.
     \item \textbf{[R7]}: The system must automatically start GPS-based tracking when biking is detected.
-    \item \textbf{[R8]}: The system must collect GPS coordinates to reconstruct the path followed by the User.
+    \item \textbf{[R8]}: The system must allow the Registered User to start the recording process by pressing a button
     \item \textbf{[R9]}: The system must collect accelerometer and gyroscope data to detect potential anomalies (e.g., potholes).
-    \item \textbf{[R10]}: The system must store complete trip statistics (distance, average speed, duration and, when available, weather conditions at the time of recording).
-    \item \textbf{[R11]}: The system must allow a registered user to view the complete statistics (distance, average speed, duration and, when available, weather conditions) related to his automated-recorded trip.
+    \item \textbf{[R10]}: The system must store complete trip statistics (distance, average speed, duration and weather conditions at the time of recording).
+    \item \textbf{[R11]}: The system must allow a registered user to view one of his automatically recorded trips enriched with statistics such as distance, average speed, duration and weather conditions at the time of recording
     \item \textbf{[R12]}: The system must buffer trip data locally when network connectivity is unavailable and must synchronize buffered trip data once connectivity is restored.
-    \item \textbf{[R13]}: The system must detect when biking ends and automatically stop tracking.
+    \item \textbf{[R13]}: The system must allow the Registered User to stop the recording process by pressing a button
     \item \textbf{[R14]}: In case of anomalies detection, the system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording.
     \item \textbf{[R15]}: The system must allow a Registered User to publish a validated trip.
 \end{itemize}
@@ -87,26 +87,28 @@ The application can be accessed through a stable internet connection to perform 
 \begin{itemize}
     \item \textbf{[R16]}: The system must allow Registered Users to store all their recorded trips (manually or automatically).
     \item \textbf{[R17]}: The system must allow a Registered User to view his private trip history, including relatively collected information.
-    \item \textbf{[R18]}: The system must allow a Registered User to review the statistics related to a bike path, such as average speed, and other performance metrics.
+    \item \textbf{[R18]}: The system must allow a Registered User to review the statistics related to a bike trip, such as average speed, and other performance metrics.
 \end{itemize}
 
 \subsubsection{Path Search, Routing and Visualization}
 
 \begin{itemize}
-    \item \textbf{[R19]}: The system must allow any user to access published paths
+    \item \textbf{[R19]}: The system must allow any user to view paths
     \item \textbf{[R20]}: The system must allow any User to search the bike path(s) between a given origin and a given destination.
     \item \textbf{[R21]}: The system must visualize the paths on a map interface.
-    \item \textbf{[R22]}: The system must compute a Path Score based on path status and estimated trip time.
-    \item \textbf{[R23]}: The system must rank available paths based on their Path Score.
-    \item \textbf{[R24]}: The system must allow a User to inspect public details of a selected path, such as status, total distance, trip time, and validated anomalies.
-    \item \textbf{[R25]}: The system shall query an external weather service to retrieve current weather conditions during the path search and display relevant warnings to the user.
+    \item \textbf{[R22]}: The system must compute a Path Score based on Path status and estimated trip time (effectiveness).
+    \item \textbf{[R23]}: The system must rank available paths, with same endpoints, based on their Path Score.
+    \item \textbf{[R24]}: The system must allow a User to inspect public details of a selected path, such as status, total distance, average trip time, and merged anomalies.
+    \item \textbf{[R25]}: The system shall query an external weather service to retrieve current weather conditions during the path visualization.
 \end{itemize}
 
 \subsubsection{Merging \& Freshness-Based Status Aggregation}
 
 \begin{itemize}
-    \item \textbf{[R26]}: The system shall append historical weather data (temperature, wind speed and direction) to the trip logs of registered users for performance analysis.
+    \item \textbf{[R26]}: The system shall append historical weather data (temperature, wind speed and direction) to the automatic trips of registered users for performance analysis.
     \item \textbf{[R27]}: The system must merge publishable information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions.
+    \item \textbf{[R28]}: The system must aggregate confirmed obstacles from published trips into their corresponding public path during the merge process
+    \item \textbf{[R29]}: The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions.
 \end{itemize}
 
 \label{sec:use_cases}
@@ -132,16 +134,16 @@ The application can be accessed through a stable internet connection to perform 
         \begin{enumerate}
             \item The \texttt{Guest User} clicks on "sign up".
             \item \texttt{BBP} displays the registration form.
-            \item The User inputs \texttt{Email}, \texttt{Username}, and \texttt{Password}.
-            \item The User clicks "create account".
+            \item The user inputs \texttt{Email}, \texttt{Username}, and \texttt{Password}.
+            \item The user clicks "create account".
             \item \texttt{BBP} validates the input syntax.
             \item \texttt{BBP} creates a new profile in the database.
             \item \texttt{BBP} confirms creation and redirects to the \texttt{Login Page}.
         \end{enumerate} \\ \hline
-        \textbf{Exceptions}           & 
-        \textbf{\texttt{Email} already in use:} \texttt{BBP} notifies the User and suggests logging in. \newline
-        \textbf{\texttt{Email} not valid:} \texttt{BBP} notifies the User and suggests correcting it. \\ \hline
         \textbf{Exit conditions}      & The User has successfully created a new account. \\ \hline
+        \textbf{Exceptions}           & 
+        \textbf{Email already in use:} \texttt{BBP} notifies the user and suggests logging in. \newline
+        \textbf{Email not valid:} \texttt{BBP} notifies the User and suggests correcting it. \\ \hline
     \end{tabularx}
 \caption{Use Case 1: Sign Up}
 \label{tab:uc1}
@@ -149,7 +151,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{diagrams/uc1_sequence_diagrams.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc1.png}
     \caption{Sequence Diagram for UC1: Sign Up}
     \label{fig:uc1_sequence}
 \end{figure}
@@ -163,16 +165,16 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} is not currently authenticated. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User clicks on "login".
+    \item The \texttt{Registered User} clicks on "login".
     \item \texttt{BBP} displays the login form.
-    \item The User inputs their credentials (\texttt{Email}/\texttt{Username}, \texttt{Password}).
-    \item The User clicks the "login" button.
-    \item \texttt{BBP} hashes the \texttt{Password} and validates it against the database.
+    \item The user inputs their credentials (\texttt{email}/\texttt{username}, \texttt{password}).
+    \item The user clicks the "login" button.
+    \item \texttt{BBP} hashes the \texttt{password} and validates it against the database.
     \item \texttt{BBP} retrieves the user's profile and starts a session.
-    \item \texttt{BBP} redirects the user to the \texttt{Home Page}.
+    \item \texttt{BBP} redirects the user to the Home Page.
 \end{enumerate} \\ \hline
+\textbf{Exit conditions}      & The user is authenticated and can access restricted features. \\ \hline
 \textbf{Exceptions}           & \textbf{Invalid Credentials:} \texttt{BBP} displays an error message and invites the user to retry. \\ \hline
-\textbf{Exit conditions}      & The User is authenticated and can access restricted features. \\ \hline
 \end{tabularx}
 \caption{Use Case 2: Log In}
 \label{tab:uc2}
@@ -180,7 +182,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.7\textwidth]{uc2_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc2.png}
     \caption{Sequence Diagram for UC2: Log In}
     \label{fig:uc2_sequence}
 \end{figure}
@@ -194,13 +196,13 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} is ready to automatically record his biking activity. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item User clicks on "Start automatic recording".
+    \item The \texttt{Registered User} clicks on "Start automatic recording".
     \item \texttt{BBP} enters detection mode and starts monitoring \texttt{GPS speed}.
     \item \texttt{BBP} detects biking activity (\texttt{speed} > \texttt{threshold}).
     \item \texttt{BBP} starts the recording session.
     \item \texttt{BBP} continuously logs \texttt{GPS coordinates} and \texttt{timestamps} (\texttt{trajectory}).
     \item \texttt{BBP} monitors \texttt{accelerometer}/\texttt{gyroscope} for anomalies (e.g., potholes).
-    \item User presses "End Automatic Record" button.
+    \item The user presses "End Automatic Record" button.
     \item \texttt{BBP} stores the detailed raw data (\texttt{GPS}, \texttt{trajectory}, \texttt{timestamps}).
     \item \texttt{BBP} retrieves historical meteorological data from the \texttt{Weather Service} and links it with the trip.
     \item \texttt{BBP} analyzes \texttt{sensors} data to identify potholes and stores them as \texttt{PENDING}.
@@ -213,8 +215,9 @@ The application can be accessed through a stable internet connection to perform 
 1. If \texttt{speed} drops below \texttt{threshold} during Step 5, \texttt{BBP} pauses data acquisition. \newline
 2. \texttt{BBP} continues monitoring \texttt{GPS speed} in the background. \newline
 3. When \texttt{speed} exceeds \texttt{threshold} again, \texttt{BBP} resumes the recording session and returns to Step 5. \\ \hline
-\textbf{Exceptions}           & \textbf{Connectivity Loss:} \texttt{BBP} buffers data locally until connection is restored. \\ \hline
 \textbf{Exit conditions}      & A new trip is recorded with its potholes, statistics, and weather conditions. \\ \hline
+\textbf{Exceptions}           & \textbf{Connectivity Loss:} \texttt{BBP} buffers data locally until connection is restored. \\ \hline
+
 \end{tabularx}
 \caption{Use Case 3: Record Trip Automatically}
 \label{tab:uc3}
@@ -222,7 +225,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc3_sequence.png}
+     \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc3.png}
     \caption{Sequence Diagram for UC3: Record Trip Automatically}
     \label{fig:uc3_sequence}
 \end{figure}
@@ -254,10 +257,10 @@ The application can be accessed through a stable internet connection to perform 
     \item \texttt{BBP} confirms the submission.
     \item \texttt{BBP} saves the data.
 \end{enumerate} \\ \hline
+\textbf{Exit conditions}      & A new manual trip is recorded, including calculated \texttt{total distance} and street-specific statuses. \\ \hline
 \textbf{Exceptions}           & 
 \textbf{Invalid Location:} The system cannot identify the street provided; operation aborted. \newline
 \textbf{Map Service Unavailable:} \texttt{BBP} shows an error and cancels the operation. \\ \hline
-\textbf{Exit conditions}      & A new manual trip is recorded, including calculated \texttt{total distance} and street-specific statuses. \\ \hline
 \end{tabularx}
 \caption{Use Case 4: Record Trip Manually}
 \label{tab:uc4}
@@ -265,7 +268,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc4_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc4.png}
     \caption{Sequence Diagram for UC4: Record Trip Manually}
     \label{fig:uc4_sequence}
 \end{figure}
@@ -281,27 +284,28 @@ The application can be accessed through a stable internet connection to perform 
 \begin{enumerate}
     \item The \texttt{Registered User} chooses one of their automatically recorded private trips.
     \item \texttt{BBP} highlights potential anomalies of the selected trip on the map interface.
+    \item The user clicks the "Start Validating" button.
     \item \textbf{Loop} for each identified \texttt{}{PENDING} anomaly:
     \begin{enumerate}
         \item \texttt{BBP} displays the details and location of a specific anomaly.
-        \item The User reviews the anomaly.
-        \item The User chooses a validation action: \texttt{Alternative 1} or \texttt{Alternative 2}.
+        \item The user reviews the anomaly.
+        \item The user chooses a validation action: \texttt{Alternative 1} or \texttt{Alternative 2}.
     \end{enumerate}
     \item \texttt{BBP} displays a summary of the validation results for all reviewed anomalies.
-    \item \texttt{BBP} prompts the User to select a \texttt{path status} for the trip segments.
-    \item The User selects the \texttt{path status} from: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
-    \item The User saves the validated trip.
+    \item \texttt{BBP} prompts the user to select a \texttt{path status} for the trip segments.
+    \item The user selects the \texttt{path status} from: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
+    \item The user saves the validated trip.
     \item \texttt{BBP} updates the trip data in the database.
 \end{enumerate} \\ \hline
 \textbf{Alternative Flows}    & 
 \textbf{\texttt{Alternative 1}: Confirm Detection} \newline
-1. The User confirms the anomaly detection. \newline
+1. The user confirms the anomaly detection. \newline
 2. \texttt{BBP} updates the pothole status to \texttt{CONFIRMED}. \newline
 \textbf{\texttt{Alternative 2}: Reject Detection} \newline
-1. The User rejects the anomaly detection. \newline
+1. The user rejects the anomaly detection. \newline
 2. \texttt{BBP} updates the pothole status to \texttt{REJECTED}. \\ \hline
-\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} shows an error regarding the map rendering and prompts the user to try the validation later. \\ \hline
 \textbf{Exit conditions}      & Trip obstacles are validated, a \texttt{path status} is assigned, and the trip is ready for optional publication. \\ \hline
+\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} shows an error regarding the map rendering and prompts the user to try the validation later. \\ \hline
 \end{tabularx}
 \caption{Use Case 5: Validate Obstacle}
 \label{tab:uc5}
@@ -309,7 +313,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc5_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc5.png}
     \caption{Sequence Diagram for UC5: Validate Obstacle}
     \label{fig:uc5_sequence}
 \end{figure}
@@ -324,16 +328,16 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} has at least one \texttt{private} trip ready to publish. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User selects a \texttt{private} trip from their history.
-    \item The User clicks the "publish" button.
-    \item \texttt{BBP} changes the trip status to \texttt{public}.
+    \item The \texttt{Registered User} selects a \texttt{private} trip from their history.
+    \item BBP displays the trip and its details.
+    \item The user clicks the "publish" button.
     \item \texttt{BBP} anonymizes the trip data to protect user privacy.
     \item \texttt{BBP} triggers the \texttt{Data Merging algorithm} to integrate anonymized data with existing datasets (considering freshness and confirmations).
-    \item \texttt{BBP} updates the \texttt{global path score} based on the new data.
-    \item \texttt{BBP} confirms the successful publication to the User.
+    \item \texttt{BBP} updates the \texttt{path score, path status, obstacles} based on the new \texttt{Trip}.
+    \item \texttt{BBP} confirms the successful publication to the user.
 \end{enumerate} \\ \hline
-\textbf{Exceptions}           & None. \\ \hline
 \textbf{Exit conditions}      & Trip data has been integrated into the public path and is available to all users. \\ \hline
+\textbf{Exceptions}           & None. \\ \hline
 \end{tabularx}
 \caption{Use Case 6: Publish Trip}
 \label{tab:uc6}
@@ -341,7 +345,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc6_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc6.png}
     \caption{Sequence Diagram for UC6: Publish Trip}
     \label{fig:uc6_sequence}
 \end{figure}
@@ -356,14 +360,14 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} has recorded at least one trip and wants to view it in detail. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User clicks on "My Trips".
-    \item \texttt{BBP} displays the list of the \texttt{Registered User} trips recorded over time.
-    \item The User selects a specific trip from their history list.
+    \item The \texttt{Registered User} clicks on "My Trips".
+    \item \texttt{BBP} displays the list of the user trips recorded over time.
+    \item The user selects a specific trip from their history list.
     \item \texttt{BBP} queries the \texttt{Map Service} to fetch map data corresponding to the chosen trip's \texttt{GPS coordinates}.
     \item \texttt{BBP} displays a detailed view including the trip \texttt{trajectory} on the map, computed statistics, found/confirmed potholes, and the weather conditions recorded during the ride.
 \end{enumerate} \\ \hline
-\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} displays an error notification regarding the map interface but continues to display the text-based statistics and metadata. \\ \hline
 \textbf{Exit conditions}      & The User successfully visualizes the detailed performance and environmental context of a single specific trip. \\ \hline
+\textbf{Exceptions}           & \textbf{Map Service Unavailable:} \texttt{BBP} displays an error notification regarding the map interface but continues to display the statistics. \\ \hline
 \end{tabularx}
 \caption{Use Case 7: View Private Trip}
 \label{tab:uc7}
@@ -371,7 +375,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc7_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc7.png}
     \caption{Sequence Diagram for UC7: View Private Trip}
     \label{fig:uc7_sequence}
 \end{figure}
@@ -386,25 +390,23 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} has recorded at least one trip and wants to delete it. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User clicks on "My Trips".
+    \item The \texttt{Registered User} clicks on "My Trips".
     \item \texttt{BBP} displays the list of the user trips recorded over time.
-    \item The User long-presses on a specific trip from the history list.
+    \item The user long-presses on a specific trip from the history list.
     \item \texttt{BBP} displays an additional in-context menu.
-    \item The User selects the "Delete" option.
+    \item The user selects the "Delete" option.
     \item \texttt{BBP} displays a confirmation prompt.
-    \item The User confirms the operation.
+    \item The user confirms the operation.
     \item \texttt{BBP} deletes the selected trip from the user history.
     \item \texttt{BBP} confirms the deletion.
 \end{enumerate} \\ \hline
 \textbf{Alternative Flows}    & 
-\textbf{\texttt{Alternative 1}: User Cancels Deletion} \newline
-1. At Step 7 of the \texttt{Flow of events}, the User cancels the operation. \newline
+\textbf{\texttt{Alternative 1}: user Cancels Deletion} \newline
+1. At Step 7 of the \texttt{Flow of events}, the user cancels the operation. \newline
 2. \texttt{BBP} aborts the deletion process. \newline
-3. \texttt{BBP} returns the User to the history list without making changes. \\ \hline
-\textbf{Exceptions}           & 
-\textbf{Invalid Selection:} The system cannot identify the selected trip; operation aborted. \newline
-\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} displays an error regarding map-related trip data but allows deletion of the database record. \\ \hline
-\textbf{Exit conditions}      & The trip is removed from the \texttt{Registered User}'s private history. If previously published, the anonymized data remains in the aggregated \texttt{PATH} information. \\ \hline
+3. \texttt{BBP} returns the user to the history list without making changes. \\ \hline
+\textbf{Exit conditions}      & The trip is removed from the \texttt{Registered user}'s private history. If previously published, the anonymized data remains in the aggregated \texttt{PATH} information. \\ \hline
+\textbf{Exceptions} & None \\ \hline
 \end{tabularx}
 \caption{Use Case 8: Delete Private Trip}
 \label{tab:uc8}
@@ -412,7 +414,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc8_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc8.png}
     \caption{Sequence Diagram for UC8: Delete Private Trip}
     \label{fig:uc8_sequence}
 \end{figure}
@@ -423,42 +425,45 @@ The application can be accessed through a stable internet connection to perform 
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
 \multicolumn{2}{|c|}{\textbf{[UC9] - SearchPath}} \\ \hline
-\textbf{Participating Actors} & \texttt{Any User} (Guest/Registered), \texttt{Map Service} \\ \hline
-\textbf{Entry condition}      & The User is ready to search paths between two points. \\ \hline
+\textbf{Participating Actors} & \texttt{User} , \texttt{Map Service} \\ \hline
+\textbf{Entry condition}      & The \texttt{User} is ready to search paths between two points. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
     \item The user clicks on the search bar.
-    \item \texttt{BBP} displays the search form with map interface.
-    \item \textbf{Loop} for \texttt{Origin} and \texttt{Destination} endpoints:
-    \begin{enumerate}
-        \item The user chooses input method: \texttt{Alternative 1} or \texttt{Alternative 2}.
-        \item \texttt{BBP} adds the selected location as the endpoint value.
-    \end{enumerate}
-    \item \texttt{BBP} searches for paths with the provided endpoints.
+    \item \texttt{BBP} displays the search form with the map interface.
+    \item The user chooses the input method: \texttt{Alternative 1} or \texttt{Alternative 2}.
+    \item \texttt{BBP} searches for paths using the provided \texttt{Origin} and \texttt{Destination} endpoints.
     \item \texttt{BBP} ranks the found paths by the previously computed/updated score.
     \item \texttt{BBP} shows the ranked list of paths to the user.
 \end{enumerate} \\ \hline
 \textbf{Alternative Flows}    & 
 \textbf{\texttt{Alternative 1}: Text Search}
 \begin{enumerate}
-    \item The user enters an endpoint street name.
-    \item \texttt{BBP} queries the \texttt{Map Service} with the provided street name.
-    \item \texttt{BBP} displays the found streets to the user.
-    \item The user selects one of the found streets.
+    \item \textbf{Loop} for \texttt{Origin} and \texttt{Destination} endpoints:
+    \begin{enumerate}
+        \item The user enters an endpoint street name.
+        \item \texttt{BBP} queries the \texttt{Map Service} with the provided street name.
+        \item \texttt{BBP} displays the found streets to the user.
+        \item The user selects one of the found streets.
+        \item \texttt{BBP} saves the selection as the endpoint value.
+    \end{enumerate}
 \end{enumerate}
 \textbf{\texttt{Alternative 2}: Map Selection}
 \begin{enumerate}
-    \item The user clicks/taps on a point on the map.
-    \item \texttt{BBP} queries the \texttt{Map Service} to identify the location.
-    \item \texttt{BBP} displays the address/location of the selected point.
-    \item The user confirms the selection.
+    \item \textbf{Loop} for \texttt{Origin} and \texttt{Destination} endpoints:
+    \begin{enumerate}
+        \item The user clicks/taps on a point on the map.
+        \item \texttt{BBP} queries the \texttt{Map Service} to identify the location.
+        \item \texttt{BBP} displays the address/location of the selected point.
+        \item The user confirms the selection.
+        \item \texttt{BBP} saves the selection as the endpoint value.
+    \end{enumerate}
 \end{enumerate} \\ \hline
+\textbf{Exit conditions}      & User is shown available paths ready to be viewed in details. \\ \hline
 \textbf{Exceptions}           & 
 \textbf{Invalid Location:} The system cannot identify the point; operation aborted. \newline
-\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} shows an error and suggests trying later. \newline
-\textbf{No Paths Found:} \texttt{BBP} displays "Path not found" message. 
-\\ \hline
-\textbf{Exit conditions}      & User is shown available paths ready to be viewed in details. \\ \hline
+\textbf{Map Service Unavailable:} \texttt{BBP} shows an error and suggests trying again later. \newline
+\textbf{No Paths Found:} \texttt{BBP} displays a "Path not found" message. \\ \hline
 \end{tabularx}
 \caption{Use Case 9: Search Path}
 \label{tab:uc9}
@@ -466,7 +471,7 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc9_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc9.png}
     \caption{Sequence Diagram for UC9: Search Path}
     \label{fig:uc9_sequence}
 \end{figure}
@@ -477,19 +482,19 @@ The application can be accessed through a stable internet connection to perform 
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
 \multicolumn{2}{|c|}{\textbf{[UC10] - Visualize Path}} \\ \hline
-\textbf{Participating Actors} & \texttt{Any User} (Guest/Registered), \texttt{Map Service}, \texttt{Weather Service} \\ \hline
+\textbf{Participating Actors} & \texttt{User}, \texttt{Map Service}, \texttt{Weather Service} \\ \hline
 \textbf{Entry condition}      & The User has searched paths between two points and has chosen one listed option. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The User clicks on one path in the search results list.
+    \item The \texttt{User} clicks on one path in the search results list.
     \item \texttt{BBP} queries the \texttt{Map Service} to fetch map data and \texttt{GPS coordinates} for the chosen path.
     \item \texttt{BBP} queries the \texttt{Weather Service} for current environmental conditions along the selected path.
     \item \texttt{BBP} displays a detailed view showing the path \texttt{trajectory} on the map, aggregated statistics (\texttt{average time}, \texttt{total distance}, and \texttt{status}), confirmed potholes, and current weather conditions along the path.
 \end{enumerate} \\ \hline
+\textbf{Exit conditions}      & The user is shown the path on the map interface along with its aggregated statistics and current weather conditions. \\ \hline
 \textbf{Exceptions}           & 
-\textbf{\texttt{Weather Service} Unavailable:} \texttt{BBP} displays an error notification regarding the weather data but continues to load the map and statistics. \newline
-\textbf{\texttt{Map Service} Unavailable:} \texttt{BBP} displays an error regarding the map interface but still shows all text-based statistics and metadata. \\ \hline
-\textbf{Exit conditions}      & The User is shown the path on the map interface along with its aggregated statistics and current weather conditions. \\ \hline
+\textbf{Weather Service Unavailable:} \texttt{BBP} displays an error notification regarding the weather data but continues to load the map and statistics. \newline
+\textbf{Map Service Unavailable:} \texttt{BBP} shows an error and suggests trying again later  \\ \hline
 \end{tabularx}
 \caption{Use Case 10: Visualize Path}
 \label{tab:uc10}
@@ -497,10 +502,139 @@ The application can be accessed through a stable internet connection to perform 
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=\textwidth]{uc10_sequence.png}
+    \includegraphics[width=\textwidth]{diagrams/sequence diagrams/uc10.png}
     \caption{Sequence Diagram for UC10: Visualize Path}
     \label{fig:uc10_sequence}
 \end{figure}
+
+\subsection{Requirements Mapping}
+
+% --- GOAL 1 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G1 - A registered user aims to record its cycling trips}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+& \textbf{D.1.2} & It is assumed that the speed and acceleration of a user cycling are mathematically distinguishable from those of walking, running or driving. \\
+\hline
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
+\hline
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
+\hline
+UC4 & \textbf{R3} & The system must allow a Registered User to manually insert a bike path by listing the name and the status of each street comprising the path. \\
+\hline
+UC4 & \textbf{R4} & The system must store manually inserted paths in the User's private trip history. \\
+\hline
+UC3 & \textbf{R5} & The system must allow a Registered User to automatically record a trip, using device sensors. \\
+\hline
+UC3 & \textbf{R6} & The system must automatically pause recording when the user stops cycling and resume when cycling activity is detected again. \\
+\hline
+UC3 & \textbf{R7} & The system must automatically start GPS-based tracking when biking is detected. \\
+\hline
+UC3 & \textbf{R8} & The system must allow the Registered User to start the recording process by pressing a button. \\
+\hline
+UC3 & \textbf{R12} & The system must buffer trip data locally when network connectivity is unavailable and synchronize buffered trip data once connectivity is restored. \\
+\hline
+UC3 & \textbf{R13} & The system must allow the Registered User to stop the recording process by pressing a button. \\
+\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+% --- GOAL 2 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G2 - A registered user wants to access their previously recorded bike trips}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+UC3, UC4, UC8 & \textbf{R16} & The system must allow Registered Users to store all their recorded trips (manually or automatically). \\
+\hline
+UC7, UC8 & \textbf{R17} & The system must allow a Registered User to view his private trip history, including relatively collected information. \\
+\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+% --- GOAL 3 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G3 - A registered user aims to receive statistics about its past trips (incl. weather)}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+& \textbf{D.1.1} & It is assumed that GPS, accelerometer and gyroscope sensors are sufficiently precise to distinguish biking vibrations from road anomalies effectively. \\
+\hline
+UC7 & \textbf{R10} & The system must store complete trip statistics (distance, average speed, duration and weather conditions at the time of recording). \\
+\hline
+UC7 & \textbf{R11} & The system must allow a registered user to view one of his automatically recorded trips enriched with statistics such as distance, average speed, duration and weather conditions at the time of recording. \\
+\hline
+UC7 & \textbf{R26} & The system shall append historical weather data (temperature, wind speed and direction) to the automatic trips of registered users for performance analysis. \\
+\hline
+\end{longtable}
+
+\newpage
+
+% --- GOAL 4 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G4 - A registered user wants to share information about a bike path to the community}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+& \textbf{D.1.3} & It is assumed that Registered Users will generally provide truthful validations regarding obstacles and path status. \\
+\hline
+UC3 & \textbf{R9} & The system must collect accelerometer and gyroscope data to detect potential anomalies (e.g., potholes). \\
+\hline
+UC5 & \textbf{R14} & The system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording. \\
+\hline
+UC6 & \textbf{R15} & The system must allow a Registered User to publish a validated trip. \\
+\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+% --- GOAL 5 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G5 - A User wants to search for bike paths and visualize results on a map}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+UC9, UC10 & \textbf{R19} & The system must allow any user to view paths. \\
+\hline
+UC9 & \textbf{R20} & The system must allow any User to search the bike path(s) between a given origin and a given destination. \\
+\hline
+UC9, UC10 & \textbf{R21} & The system must visualize the paths on a map interface. \\
+\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+% --- GOAL 6 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G6 - A User wants to retrieve up to date information about bike paths (status/weather)}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+UC9 & \textbf{R22} & The system must compute a Path Score based on Path status and estimated trip time (effectiveness). \\
+\hline
+UC9 & \textbf{R23} & The system must rank available paths, with same endpoints, based on their Path Score. \\
+\hline
+UC10 & \textbf{R24} & The system must allow a User to inspect public details of a selected path, such as status, total distance, average trip time, and merged anomalies. \\
+\hline
+UC10 & \textbf{R25} & The system shall query an external weather service to retrieve current weather conditions during the path visualization. \\
+\hline
+UC6, UC10 & \textbf{R27} & The system must merge publishable information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions. \\
+\hline
+UC6, UC10 & \textbf{R28} & The system must aggregate confirmed obstacles from published trips into their corresponding public path during the merge process. \\
+\hline
+UC6, UC10 & \textbf{R29} & The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions. \\
+\hline
+\end{longtable}
+
 
 \section{Performance Requirements}
 \label{sec:performance}
