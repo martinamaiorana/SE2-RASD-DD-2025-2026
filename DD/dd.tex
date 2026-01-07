@@ -1,0 +1,76 @@
+% DD Template - Politecnico di Milano
+% Software Engineering 2 - MSc in Computer Science
+% Modular version - Organized in multiple files and folders
+
+\documentclass[12pt,a4paper,oneside]{book}
+
+%------------------------------------------------------------------------------
+% CONFIGURATION FILES
+%------------------------------------------------------------------------------
+\input{config/packages}
+\input{config/colors}
+\input{config/formatting}
+\input{config/metadata}
+
+%------------------------------------------------------------------------------
+% BEGIN DOCUMENT
+%------------------------------------------------------------------------------
+\begin{document}
+
+\fancypagestyle{plain}{%
+\fancyhf{}
+\fancyhead[RO,RE]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+%------------------------------------------------------------------------------
+% FRONTMATTER
+%------------------------------------------------------------------------------
+\pagestyle{empty}
+\frontmatter
+
+\input{frontmatter/titlepage}
+\input{frontmatter/revision}
+
+%------------------------------------------------------------------------------
+% MAIN CONTENT
+%------------------------------------------------------------------------------
+\addtocontents{toc}{\vspace{2em}}
+\mainmatter
+
+\let\latexchapter\chapter
+\renewcommand{\chapter}{\cleardoublepage\phantomsection\latexchapter}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO, RE]{\textbf{\textcolor{bluepoli}{\thechapter\hsp\textcolor{bluepoli}{|   }\hsp \leftmark}}}
+\fancyhead[LE, RO]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%------------------------------------------------------------------------------
+% CHAPTERS
+%------------------------------------------------------------------------------
+\input{chapters/01_introduction}
+\input{chapters/02_architectural_design}
+\input{chapters/03_user_interface_design}
+\input{chapters/04_requirements_traceability}
+\input{chapters/05_implementation_integration_testing}
+\input{chapters/06_effort_spent}
+\input{DD/chapters/07_ai_usage}
+\input{chapters/08_references}
+
+%------------------------------------------------------------------------------
+% BIBLIOGRAPHY (if needed)
+%------------------------------------------------------------------------------
+% \addtocontents{toc}{\vspace{2em}}
+% \bibliography{DD_bibliography}
+
+%------------------------------------------------------------------------------
+% APPENDICES
+%------------------------------------------------------------------------------
+\cleardoublepage
+\addtocontents{toc}{\vspace{2em}}
+
+\cleardoublepage
+
+\end{document}

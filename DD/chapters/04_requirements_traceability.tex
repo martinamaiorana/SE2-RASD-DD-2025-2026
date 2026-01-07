@@ -1,0 +1,56 @@
+\chapter{Requirements Traceability}
+
+The following section presents the Requirements Traceability Matrix, which maps the Functional Requirements defined in the RASD to the specific architectural components and subsystems designed in this document.
+
+\small
+\begin{tabular}{|l|p{6cm}|p{7cm}|}
+\hline
+\textbf{Req ID} & \textbf{Description (Summary)} & \textbf{Mapped Design Components} \\
+\hline
+R1 & Allow unregistered User to sign up & Mobile App, API Gateway, Auth Service, Auth DB \\
+\hline
+R2 & Allow registered Users to login & Mobile App, API Gateway, Auth Service, Auth DB \\
+\hline
+R3 & Manually insert a bike path (streets/status) & Mobile App, API Gateway, Trip Service, Map Service Adapter \\
+\hline
+R4 & Automatically record trip using sensors & Mobile App, API Gateway, Mobile Sensors, Trip Service \\
+\hline
+R5 & Start/stop via button press & Mobile App, API Gateway, Trip Service, Trip DB, Message Broker \\
+\hline
+R6 & Auto-pause/resume recording based on activity & Mobile App, Mobile Sensors \\
+\hline
+R7 & Analyze sensors' data to detect anomalies & Message Broker, Analysis Service \\
+\hline
+R8 & Produce trip statistics and append them to the trip information & Message Broker, Analysis Service, Trip Service, Weather Service Adapter, Trip DB \\
+\hline
+R9 & Buffer data locally & Mobile App, Mobile Sensors \\
+\hline
+R10 & Confirm/Reject anomalies within 72h & Mobile App, API Gateway, Trip Service, Trip DB, Map Service Adapter \\
+\hline
+R11 & Publish a validated trip in anonimyzed form & Mobile App, API Gateway, Trip Service, Map Service Adapter, Trip DB, Message Broker \\
+\hline
+R12 & Store all recorded trips (manual/auto) & Trip Service, Trip DB \\
+\hline
+R13 & Allow to view private trip history & Mobile App, API Gateway, Trip Service, Trip DB \\
+\hline
+R14 & Allow to view statistics related to a private trip & Mobile App, API Gateway, Trip Service, Trip DB, Map Service Adapter \\
+\hline
+R15 & Allow anyone to search a path between origin/destination & Mobile App, API Gateway, Path Service, Map Service Adapter, Path DB \\
+\hline
+R16 & List and rank available paths using their score & Mobile App, API Gateway, Path Service, Path DB \\
+\hline
+R17 & Visualize paths on a map & Mobile App, API Gateway, Path Service, Path DB, Map Service Adapter \\
+\hline
+R18 & Compute Path Score (status/effectiveness) & Merge Service \\
+\hline
+R19 & View public path information & Mobile App, API Gateway, Path Service, Path DB, Map Service Adapter \\
+\hline
+R20 & Display current weather conditions during path visualization & Mobile App, API Gateway, Path Service, Map Service Adapter, Path DB, Weather Service Adapter \\
+\hline
+R21 & Merge published trips & Merge Service, Message Broker, Trip Service, Path DB, Path Service \\
+\hline
+R22 & Remove obstacles when newer published trips don't contain them & Merge Service \\
+\hline
+R23 & Allow to delete a recorded trip & Mobile App, API Gateway, Trip Service, Trip DB \\
+\hline
+\end{tabular}

@@ -1,0 +1,94 @@
+%------------------------------------------------------------------------------
+% THEOREM ENVIRONMENTS
+%------------------------------------------------------------------------------
+\declaretheoremstyle[
+  headfont=\color{bluepoli}\normalfont\bfseries,
+  bodyfont=\color{black}\normalfont\itshape,
+]{colored}
+
+\captionsetup[figure]{labelfont={color=bluepoli}}
+\captionsetup[table]{labelfont={color=bluepoli}}
+\captionsetup[algorithm]{labelfont={color=bluepoli}}
+
+\theoremstyle{colored}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+
+\newcommand\T{\rule{0pt}{2.6ex}}
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}}
+
+\newcounter{algsubstate}
+\renewcommand{\thealgsubstate}{\alph{algsubstate}}
+\newenvironment{algsubstates}
+  {\setcounter{algsubstate}{0}%
+   \renewcommand{\STATE}{%
+     \stepcounter{algsubstate}%
+     \Statex {\small\thealgsubstate:}\space}}
+  {}
+
+\newcommand\numfontsize{\@setfontsize\Huge{200}{60}}
+
+%------------------------------------------------------------------------------
+% CHAPTER AND SECTION FORMATTING
+%------------------------------------------------------------------------------
+\newcommand{\hsp}{\hspace{0pt}}
+
+\titleformat{\chapter}[hang]{
+\fontsize{50}{20}\selectfont\bfseries\filright}{\textcolor{bluepoli}{\thechapter\hsp\hspace{2mm}\textcolor{bluepoli}{|   }\hsp}}{0pt}{\huge\bfseries\textcolor{bluepoli}}
+
+\titleformat{\section}
+{\color{bluepoli}\normalfont\Large\bfseries}
+{\color{bluepoli}\thesection.}{1em}{}
+
+\titleformat{\subsection}
+{\color{bluepoli}\normalfont\large\bfseries}
+{\color{bluepoli}\thesubsection.}{1em}{}
+
+\titleformat{\subsubsection}
+{\color{black}\normalfont\bfseries}
+{\color{black}\thesubsubsection.}{1em}{}
+
+\numberwithin{algorithm}{chapter}
+
+%------------------------------------------------------------------------------
+% BACKGROUND PICTURE FOR TITLE PAGE
+%------------------------------------------------------------------------------
+\newcommand\BackgroundPicTR{
+	\put(200,330){%
+		\parbox[b][\paperheight]{\paperwidth}{%
+			\vfill
+			\centering
+			\transparent{0.4}
+			\includegraphics[width=0.70\paperwidth]{raggiera_polimi.eps}
+			\vfill
+}}}
+
+%------------------------------------------------------------------------------
+% CODE LISTINGS - ALLOY
+%------------------------------------------------------------------------------
+\lstdefinelanguage{alloy}{
+  keywords={abstract, all, and, as, assert, but, check, disj, else, exactly,
+            extends, fact, for, fun, iden, iff, implies, in, Int, let, lone,
+            module, no, none, not, one, open, or, pred, run, set, sig, some,
+            sum, univ, var, enum},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={this, String, seq},
+  ndkeywordstyle=\color{purple}\bfseries,
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  tabsize=2,
+  showstringspaces=false
+}

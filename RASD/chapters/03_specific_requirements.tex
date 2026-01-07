@@ -14,9 +14,19 @@
 
     \item \textbf{Home Page and Search Bar}: The system must provides a home page featuring a top-positioned search bar for specifying origin and destination points through either direct map selection or the two streets name entries. For registered users, the page includes buttons for initiating automated or manual trip recording sessions, and provides access to personal trip history through bottom-positioned navigation controls.
 
-    \item \textbf{Map interface}: When Users search a path, a map interface representing the possible paths, ordered by score, should be presented addto the user. Users can tap on various paths and look at some details.
+    \item \textbf{Trips History Page}: The system provides a "Your history" interface that displays a chronological list of recorded activities. Each entry includes the general location (e.g., Milano or Polimi), the date of the trip, and a validation status tag such as "To validate" or "Validated."
 
-    \item \textbf{History}: The system must include a history section where registered users can look at all their past registered trips and related statistics (total distance, trip time, average speed).
+    \item \textbf{Trip Validation Page}: The system includes a validation flow for detected obstacles. Each obstacle is presented with its confidence score percentage and a map location. Users can select "Confirm" or "Reject" for each item, and the process concludes with a "Validation summary" showing the total count of confirmed and rejected obstacles.
+
+    \item \textbf{Trip Publication Page}: The interface features a "Publish Trip" mechanism that prompts a confirmation dialog. This dialog informs the user that the trip will be anonymized and contributed to the public path instance. Once confirmed, the system displays a success message indicating that the information is being integrated.
+
+    \item \textbf{Path Searching Page}: The search interface allows users to define an "Origin" and a "Destination." Users can input locations by typing to receive auto-suggestions or by using the "Pick" from map feature. A prominent "Search" button is used to generate available routing options once both points are set.
+
+    \item \textbf{Path Viewing Page}: Upon searching, the system displays "Available Paths" (labeled Path A, B, and C) on an interactive map. A list at the bottom summarizes each path by its travel time and condition (e.g., "Optimal" or "Requires Maintenance"), with the most efficient route highlighted as "Recommended."
+
+    \item \textbf{Trip Viewing (Trip Summary) Page}: The "Trip summary" page provides a detailed overview of a recorded session. It displays key performance data including Total Time, Total distance (e.g., 1.3km), Average Speed (e.g., $21~km/h$), and the Current Weather conditions (e.g., Sunny, $22^{\circ}C$).
+
+    \item \textbf{Trip Deletion Page}: The system allows users to remove trips from their personal history. When a deletion is initiated, an "Are you sure?" prompt appears, warning that the action is irreversible. A "Trip deleted successfully!" notification confirms the removal of the record from the user's history.
 \end{itemize}
 
 \subsection{Hardware Interfaces}
@@ -62,53 +72,47 @@ The application can be accessed through a stable internet connection to perform 
 \subsubsection{Manual Trip Tracking}
 
 \begin{itemize}
-    \item \textbf{[R3]}: The system must allow a Registered User to manually insert a bike path by listing the name and the status of each street comprising the path.
-    \item \textbf{[R4]}: The system must store manually inserted paths in the User's private trip history.
+    \item \textbf{[R3]}: The system must allow a Registered User to manually insert a bike trip by listing the name and the status of each street comprising the trip.
 \end{itemize}
 
 \subsubsection{Automatic Trip Tracking}
 
 \begin{itemize}
-    \item \textbf{[R5]}: The system must allow a Registered User to automatically record a trip, using device sensors
-    \item \textbf{[R6]}: The system must automatically pause recording when the user stops cycling and resume when cycling activity is detected again.
-    \item \textbf{[R7]}: The system must automatically start GPS-based tracking when biking is detected.
-    \item \textbf{[R8]}: The system must allow the Registered User to start the recording process by pressing a button
-    \item \textbf{[R9]}: The system must collect accelerometer and gyroscope data to detect potential anomalies (e.g., potholes).
-    \item \textbf{[R10]}: The system must store complete trip statistics (distance, average speed, duration and weather conditions at the time of recording).
-    \item \textbf{[R11]}: The system must allow a registered user to view one of his automatically recorded trips enriched with statistics such as distance, average speed, duration and weather conditions at the time of recording
-    \item \textbf{[R12]}: The system must buffer trip data locally when network connectivity is unavailable and must synchronize buffered trip data once connectivity is restored.
-    \item \textbf{[R13]}: The system must allow the Registered User to stop the recording process by pressing a button
-    \item \textbf{[R14]}: In case of anomalies detection, the system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording.
-    \item \textbf{[R15]}: The system must allow a Registered User to publish a validated trip.
+    \item \textbf{[R4]}: The system must allow a Registered User to automatically record a trip using device sensors.
+    \item \textbf{[R5]}: The system must allow the Registered User to start and stop the process by pressing buttons.
+    \item \textbf{[R6]}: The system must automatically start (or resume) the sensors tracking when cycling activity is detected and pause it when the user stops cycling.
+    \item \textbf{[R7]}: The system must analyze sensors' data to detect potential anomalies (e.g., potholes).
+    \item \textbf{[R8]}: The system must produce trip statistics (distance, average speed, duration and weather conditions at the time of recording) and append them to trip information.
+    \item \textbf{[R9]}: The system must buffer trip data locally and synchronize it with the server once trip recording has ended in order to overcome network connectivity unavailability.
+    \item \textbf{[R10]}: In case of anomalies detection, the system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording.
+    \item \textbf{[R11]}: The system shall allow Registered Users to publish validated trips in an anonymized form to protect user privacy.
 \end{itemize}
 
-\subsubsection{Trip Storage and Personal Analytics}
+\subsubsection{Trip History and Review}
 
 \begin{itemize}
-    \item \textbf{[R16]}: The system must allow Registered Users to store all their recorded trips (manually or automatically).
-    \item \textbf{[R17]}: The system must allow a Registered User to view his private trip history, including relatively collected information.
-    \item \textbf{[R18]}: The system must allow a Registered User to review the statistics related to a bike trip, such as average speed, and other performance metrics.
+    \item \textbf{[R12]}: The system must allow Registered Users to store all their recorded trips (manually or automatically).
+    \item \textbf{[R13]}: The system must allow a Registered User to view their private trip history.
+    \item \textbf{[R14]}: The system must allow a Registered User to review the statistics related to a bike trip, such as average speed, total distance and weather conditions when available.
+    \item \textbf{[R23]}: The system must allow a Registered User to delete one of their recorded trips.
 \end{itemize}
 
 \subsubsection{Path Search, Routing and Visualization}
 
 \begin{itemize}
-    \item \textbf{[R19]}: The system must allow any user to view paths
-    \item \textbf{[R20]}: The system must allow any User to search the bike path(s) between a given origin and a given destination.
-    \item \textbf{[R21]}: The system must visualize the paths on a map interface.
-    \item \textbf{[R22]}: The system must compute a Path Score based on Path status and estimated trip time (effectiveness).
-    \item \textbf{[R23]}: The system must rank available paths, with same endpoints, based on their Path Score.
-    \item \textbf{[R24]}: The system must allow a User to inspect public details of a selected path, such as status, total distance, average trip time, and merged anomalies.
-    \item \textbf{[R25]}: The system shall query an external weather service to retrieve current weather conditions during the path visualization.
+    \item \textbf{[R15]}: The system must allow any User to search for bike paths between a given origin and a given destination.
+    \item \textbf{[R16]}: The system must list and rank available paths based on their Path Score.
+    \item \textbf{[R17]}: The system must visualize available paths on a map
+    \item \textbf{[R18]}: The system must compute a Path Score based on Path status and estimated trip time (effectiveness).
+    \item \textbf{[R19]}: The system must allow any User to view public Path information such as aggregated statistics such as status, total distance, average trip time, and merged anomalies.
+    \item \textbf{[R20]}: The system shall query an external weather service to retrieve current weather conditions during the path visualization.
 \end{itemize}
 
 \subsubsection{Merging \& Freshness-Based Status Aggregation}
 
 \begin{itemize}
-    \item \textbf{[R26]}: The system shall append historical weather data (temperature, wind speed and direction) to the automatic trips of registered users for performance analysis.
-    \item \textbf{[R27]}: The system must merge publishable information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions.
-    \item \textbf{[R28]}: The system must aggregate confirmed obstacles from published trips into their corresponding public path during the merge process
-    \item \textbf{[R29]}: The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions.
+    \item \textbf{[R21]}: The system must merge published information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions.
+    \item \textbf{[R22]}: The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions.
 \end{itemize}
 
 \label{sec:use_cases}
@@ -216,7 +220,7 @@ The application can be accessed through a stable internet connection to perform 
 2. \texttt{BBP} continues monitoring \texttt{GPS speed} in the background. \newline
 3. When \texttt{speed} exceeds \texttt{threshold} again, \texttt{BBP} resumes the recording session and returns to Step 5. \\ \hline
 \textbf{Exit conditions}      & A new trip is recorded with its potholes, statistics, and weather conditions. \\ \hline
-\textbf{Exceptions}           & \textbf{Connectivity Loss:} \texttt{BBP} buffers data locally until connection is restored. \\ \hline
+\textbf{Exceptions} & None. \\ \hline
 
 \end{tabularx}
 \caption{Use Case 3: Record Trip Automatically}
@@ -292,8 +296,8 @@ The application can be accessed through a stable internet connection to perform 
         \item The user chooses a validation action: \texttt{Alternative 1} or \texttt{Alternative 2}.
     \end{enumerate}
     \item \texttt{BBP} displays a summary of the validation results for all reviewed anomalies.
-    \item \texttt{BBP} prompts the user to select a \texttt{path status} for the trip segments.
-    \item The user selects the \texttt{path status} from: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
+    \item \texttt{BBP} prompts the user to select a \texttt{ status} for the trip.
+    \item The user selects the \texttt{status} from: \texttt{OPTIMAL}, \texttt{MEDIUM}, \texttt{SUFFICIENT}, \texttt{REQUIRES\_MAINTENANCE}, or \texttt{PERMANENTLY\_CLOSE}.
     \item The user saves the validated trip.
     \item \texttt{BBP} updates the trip data in the database.
 \end{enumerate} \\ \hline
@@ -328,7 +332,9 @@ The application can be accessed through a stable internet connection to perform 
 \textbf{Entry condition}      & The \texttt{Registered User} has at least one \texttt{private} trip ready to publish. \\ \hline
 \textbf{Flow of events}       & 
 \begin{enumerate}
-    \item The \texttt{Registered User} selects a \texttt{private} trip from their history.
+    \item The \texttt{Registered User} clicks on "My Trips".
+    \item BBP displays the list of the user trips recorded over time.
+    \item The user selects a specific trip from their history list.
     \item BBP displays the trip and its details.
     \item The user clicks the "publish" button.
     \item \texttt{BBP} anonymizes the trip data to protect user privacy.
@@ -509,49 +515,75 @@ The application can be accessed through a stable internet connection to perform 
 
 \subsection{Requirements Mapping}
 
-% --- GOAL 1 ---
-\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+% --- GOAL 0 ---
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G1 - A registered user aims to record its cycling trips}} \\
+\multicolumn{3}{|c|}{\textbf{G0 - A user wants to signup first and then login to the application.}} \\
 \hline
 \textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
-\hline
-& \textbf{D.1.2} & It is assumed that the speed and acceleration of a user cycling are mathematically distinguishable from those of walking, running or driving. \\
 \hline
 UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
 \hline
 UC2 & \textbf{R2} & The system must allow registered Users to login. \\
 \hline
-UC4 & \textbf{R3} & The system must allow a Registered User to manually insert a bike path by listing the name and the status of each street comprising the path. \\
+\end{tabular}
+\end{table}
+
+% --- GOAL 1 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-UC4 & \textbf{R4} & The system must store manually inserted paths in the User's private trip history. \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G1 - A registered user aims to automatically record their cycling trips using theirs
+mobile device’s sensors.}} \\
 \hline
-UC3 & \textbf{R5} & The system must allow a Registered User to automatically record a trip, using device sensors. \\
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
 \hline
-UC3 & \textbf{R6} & The system must automatically pause recording when the user stops cycling and resume when cycling activity is detected again. \\
+& \textbf{D.1.1} & \textbf{Sensor Reliability}: It is assumed that GPS, accelerometer and gyroscope
+sensors provided by the mobile hardware are sufficiently precise to distinguish biking
+vibrations from road anomalies effectively. \\
 \hline
-UC3 & \textbf{R7} & The system must automatically start GPS-based tracking when biking is detected. \\
+& \textbf{D.1.2} & \textbf{Biking Speed Distinctiveness}: It is assumed that the speed and the
+acceleration of a user cycling are mathematically distinguishable from those of walk-
+ing, running or driving a car, enabling the Automated Mode to function correctly
+without explicit user triggers. \\
 \hline
-UC3 & \textbf{R8} & The system must allow the Registered User to start the recording process by pressing a button. \\
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
 \hline
-UC3 & \textbf{R12} & The system must buffer trip data locally when network connectivity is unavailable and synchronize buffered trip data once connectivity is restored. \\
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
 \hline
-UC3 & \textbf{R13} & The system must allow the Registered User to stop the recording process by pressing a button. \\
+UC3 & \textbf{R4} & The system must allow a Registered User to automatically record a trip using device sensors. \\
+\hline
+UC3 & \textbf{R5} & The system must allow the Registered User to start and stop the process by pressing buttons. \\
+\hline
+UC3 & \textbf{R6} & The system must automatically start (or resume) the sensors tracking when cycling activity is detected and pause it when the user stops cycling.\\
+\hline
+UC3 &\textbf{R7} & The system must analyze sensors' data to detect potential anomalies (e.g., potholes).\\
+\hline
+UC3     &\textbf{R8} & The system must produce trip statistics (distance, average speed, duration and weather conditions at the time of recording) and append them to trip information.\\
+\hline
+UC3     &\textbf{R9} & The system must buffer trip data locally and synchronize it with the server once trip recording has ended in order to overcome network connectivity unavailability.\\
+\hline
+UC3     &\textbf{R10} & In case of anomalies detection, the system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording.\\
+\hline
+UC3     &\textbf{R11} & The system shall allow Registered Users to publish validated trips in an anonymized form to protect user privacy.\\
 \hline
 \end{longtable}
 
-\vspace{0.5cm}
+\vspace{0.6cm}
 
 % --- GOAL 2 ---
 \begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G2 - A registered user wants to access their previously recorded bike trips}} \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G2 - A registered user aims to manually record a bike trip by inserting one street at a time without physical cycling.}} \\
 \hline
 \textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
 \hline
-UC3, UC4, UC8 & \textbf{R16} & The system must allow Registered Users to store all their recorded trips (manually or automatically). \\
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
 \hline
-UC7, UC8 & \textbf{R17} & The system must allow a Registered User to view his private trip history, including relatively collected information. \\
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
+\hline
+UC4 & \textbf{R3} & The system must allow a Registered User to manually insert a bike trip by listing the name and the status of each street comprising the trip. \\
 \hline
 \end{longtable}
 
@@ -560,53 +592,61 @@ UC7, UC8 & \textbf{R17} & The system must allow a Registered User to view his pr
 % --- GOAL 3 ---
 \begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G3 - A registered user aims to receive statistics about its past trips (incl. weather)}} \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G3 - A registered user wants to access their recorded bike trips history}} \\
 \hline
 \textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
 \hline
-& \textbf{D.1.1} & It is assumed that GPS, accelerometer and gyroscope sensors are sufficiently precise to distinguish biking vibrations from road anomalies effectively. \\
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
 \hline
-UC7 & \textbf{R10} & The system must store complete trip statistics (distance, average speed, duration and weather conditions at the time of recording). \\
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
 \hline
-UC7 & \textbf{R11} & The system must allow a registered user to view one of his automatically recorded trips enriched with statistics such as distance, average speed, duration and weather conditions at the time of recording. \\
+UC3, UC4 & \textbf{R12} & The system must allow Registered Users to store all their recorded trips (manually or automatically). \\
 \hline
-UC7 & \textbf{R26} & The system shall append historical weather data (temperature, wind speed and direction) to the automatic trips of registered users for performance analysis. \\
-\hline
-\end{longtable}
-
-\newpage
-
-% --- GOAL 4 ---
-\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
-\hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G4 - A registered user wants to share information about a bike path to the community}} \\
-\hline
-\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
-\hline
-& \textbf{D.1.3} & It is assumed that Registered Users will generally provide truthful validations regarding obstacles and path status. \\
-\hline
-UC3 & \textbf{R9} & The system must collect accelerometer and gyroscope data to detect potential anomalies (e.g., potholes). \\
-\hline
-UC5 & \textbf{R14} & The system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording. \\
-\hline
-UC6 & \textbf{R15} & The system must allow a Registered User to publish a validated trip. \\
+UC7 & \textbf{R13} & The system must allow a Registered User to view his private trip history. \\
 \hline
 \end{longtable}
 
 \vspace{0.5cm}
 
-% --- GOAL 5 ---
+% --- GOAL 4 ---
 \begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G5 - A User wants to search for bike paths and visualize results on a map}} \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G4 - A registered user aims to view trip on map and consult its statistics, including average speed, trip time and meteorological conditions (at recording time)}} \\
 \hline
 \textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
 \hline
-UC9, UC10 & \textbf{R19} & The system must allow any user to view paths. \\
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
 \hline
-UC9 & \textbf{R20} & The system must allow any User to search the bike path(s) between a given origin and a given destination. \\
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
 \hline
-UC9, UC10 & \textbf{R21} & The system must visualize the paths on a map interface. \\
+UC3 & \textbf{R8} & The system must produce trip statistics (distance, average speed, duration and weather conditions at the time of recording) and append them to trip information. \\
+\hline
+UC7 & \textbf{R13} & The system must allow a Registered User to view his private trip history. \\
+\hline
+UC7 & \textbf{R14} & The system must allow a Registered User to review the statistics related to a bike trip, such as average speed, total distance and weather conditions when available. \\
+\hline
+\end{longtable}
+
+\newpage
+
+% --- GOAL 5 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G5 - A registered user wants to share information about a bike trip they have recorded, including their status and the presence of obstacles, making this information available to the community (all users).}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
+\hline
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
+\hline
+UC5 & \textbf{R10} & In case of anomalies detection, the system must allow a Registered User to confirm or reject each detected anomaly within 72 hours from the trip recording. \\
+\hline
+UC6 & \textbf{R11} & The system shall allow Registered Users to publish validated trips in an anonymized form to protect user privacy. \\
+\hline
+UC7 & \textbf{R13} & The system must allow a Registered User to view his private trip history. \\
+\hline
+UC7 & \textbf{R14} & The system must allow a Registered User to review the statistics related to a bike trip, such as average speed, total distance and weather conditions when available. \\
 \hline
 \end{longtable}
 
@@ -615,23 +655,61 @@ UC9, UC10 & \textbf{R21} & The system must visualize the paths on a map interfac
 % --- GOAL 6 ---
 \begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G6 - A User wants to retrieve up to date information about bike paths (status/weather)}} \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G6 - A User wants to search for bike paths given an origin and a destination point and visualize results on a map.}} \\
 \hline
 \textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
 \hline
-UC9 & \textbf{R22} & The system must compute a Path Score based on Path status and estimated trip time (effectiveness). \\
+UC9 & \textbf{R15} & The system must allow any User to search for bike paths between a given origin and a given destination. \\
 \hline
-UC9 & \textbf{R23} & The system must rank available paths, with same endpoints, based on their Path Score. \\
+UC9 & \textbf{R16} & The system must list and rank available paths based on their Path Score. \\
 \hline
-UC10 & \textbf{R24} & The system must allow a User to inspect public details of a selected path, such as status, total distance, average trip time, and merged anomalies. \\
+UC9 & \textbf{R17} & The system must visualize available paths on a map \\
 \hline
-UC10 & \textbf{R25} & The system shall query an external weather service to retrieve current weather conditions during the path visualization. \\
+UC6 & \textbf{R18} & The system must compute a Path Score based on Path status and estimated trip time (effectiveness). \\
 \hline
-UC6, UC10 & \textbf{R27} & The system must merge publishable information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions. \\
+\end{longtable}
+
+\vspace{0.5cm}
+
+% --- GOAL 7 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
 \hline
-UC6, UC10 & \textbf{R28} & The system must aggregate confirmed obstacles from published trips into their corresponding public path during the merge process. \\
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G7 - A User wants to retrieve up-to-date information about bike paths, their status, and current weather conditions.}} \\
 \hline
-UC6, UC10 & \textbf{R29} & The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions. \\
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+& \textbf{D.1.3} & \textbf{User Trustworthiness:} Given the community-based nature of the data,
+it is assumed that Registered Users will generally provide truthful validations regarding obstacles and path status. \\
+\hline
+& \textbf{D.1.4} & \textbf{Obstacle Detection:} If different Automatic Trips corresponding to the same Path detect the same obstacle, we assume that the obstacle has the same
+coordinates in both trips. \\
+\hline
+UC10 & \textbf{R19} & The system must allow any User to view public Path information such as aggregated statistics such as status, total distance, average trip time, and merged anomalies. \\
+\hline
+UC10 & \textbf{R20} & The system shall query an external weather service to retrieve current weather conditions during the path visualization. \\
+\hline
+UC6 & \textbf{R21} & The system must merge published information from multiple Users referring to the same path, considering their freshness and the number of confirming contributions. \\
+\hline
+UC6 & \textbf{R22} & The system must remove obstacles from a path when newer published trips covering the same trajectory do not report those obstacles, maintaining data consistency with current road conditions. \\
+\hline
+\hline
+\end{longtable}
+
+% --- GOAL 8 ---
+\begin{longtable}{|p{2.5cm}|p{1cm}|p{10.5cm}|}
+\hline
+\multicolumn{3}{|p{14.5cm}|}{\centering \textbf{G8 - A registered user wants to delete one of their previously recorded trips.}} \\
+\hline
+\textbf{Use Cases} & \multicolumn{2}{c|}{\textbf{Requirements and Domain Assumptions}} \\
+\hline
+UC1 & \textbf{R1} & The system must allow an unregistered User to sign up. \\
+\hline
+UC2 & \textbf{R2} & The system must allow registered Users to login. \\
+\hline
+UC3, UC4 & \textbf{R12} & The system must allow Registered Users to store all their recorded trips (manually or automatically). \\
+\hline
+UC7 & \textbf{R13} & The system must allow a Registered User to view his private trip history. \\
+\hline
+UC8 & \textbf{R23} & The system must allow a Registered User to delete one of their recorded trips.\\
 \hline
 \end{longtable}
 
