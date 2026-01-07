@@ -12,16 +12,15 @@ The architecture of the platform is divided into three layers. The figure below 
 
 \textbf{Presentation Layer}
 
-The Presentation Layer consists of the BBP Mobile Application running on the user's mobile device (Android/iOS). The mobile app provides the user interface for authentication, trip recording, path search, and visualization. This layer also includes the embedded mobile sensors (GPS, accelerometer, gyroscope), with which the BBP application interacts through the local operating system sensor APIs to collect mobility data during automatic trip recordings.
+The Presentation Layer consists of the BBP Mobile Application running on the user's mobile device (Android/iOS). The mobile app provides the user interface for authentication, trip recording, path search, and visualization. This layer also includes the embedded mobile sensors (GPS, accelerometer, gyroscope), which the BBP application interacts with through the local operating system sensor APIs to collect mobility data during automatic trip recordings.
 
 \textbf{Application Layer}
 
-The Application Layer implements the core business logic of the platform and is structured as a microservice-based architecture, where each service can be deployed and scaled independently. Loose coupling and improved scalability are supported by asynchronous, event-driven processing mediated by a message broker. In the deployment view, this broker is hosted on a dedicated messaging infrastructure (Messaging Tier) to isolate workloads and improve scalability and fault tolerance, while remaining part of the Application Layer from a logical perspective. Integration with external Map and Weather providers is encapsulated by dedicated adapters and safeguarded by circuit breaker mechanisms, increasing resilience against temporary outages of third-party dependencies. These architectural choices are discussed in more detail in the following sections. \\To enhance reliability and scalability, key backend components are deployed with replication, ensuring high availability and supporting higher workloads by distributing traffic and processing across multiple instances.
+The Application Layer implements the core business logic of the platform and is structured as a microservice-based architecture, where each service can be deployed and scaled independently. Loose coupling and improved scalability are supported by asynchronous, event-driven processing mediated by a message broker. In the deployment view, this broker is hosted on a dedicated messaging infrastructure (Messaging Tier) to isolate workloads and improve scalability and fault tolerance, while remaining part of the Application Layer from a logical perspective. Integration with external Map and Weather providers is encapsulated by dedicated adapters and safeguarded by circuit breaker mechanisms to handle third-party dependencies unavailability gracefully. These architectural choices are discussed in more detail in the following sections. \\To enhance reliability and scalability, key backend components are deployed with replication, ensuring high availability and supporting higher workloads by distributing traffic and processing across multiple instances using a Load Balancer.
 
 \textbf{Data Layer}
 
 The Data Layer provides persistent storage for the platform and adopts a database-per-service approach to ensure clear data ownership and strong isolation between microservices. Each datastore is accessed exclusively by its corresponding service, preventing direct cross-service database access and reinforcing separation of concerns. \\To improve availability and fault tolerance, databases are deployed with replication, reducing the risk of single points of failure and supporting higher workloads by accessing redundant copies of the database.
-
 
 
 \section{Component View}
@@ -63,15 +62,15 @@ The backend is composed of the following microservices:
     
     \item \textbf{Path Service}, which provides path search and visualization features. It keeps public paths state updated by applying merge results and enriches paths view with information retrieved from external Map and Weather services.
     
-    \item \textbf{Analysis Service} processes automatically recorded trips to compute statistics (e.g., duration, average speed), enriching them with weather conditions if available, and detects road anomalies such as potholes. It produces obstacle candidates associated with trips and triggers the related validation workflow.
+    \item \textbf{Analysis Service} processes automatically recorded trips to compute statistics (e.g., duration, average speed), enriching them with weather conditions if available, and detects road anomalies such as potholes.
     
-    \item \textbf{Merge Service} aggregates information from multiple published trips referring to the same public path. It applies merging rules and computes path scores for ranking.
+    \item \textbf{Merge Service} aggregates information from multiple published trips referring to the same public Path. It applies merging rules and computes path scores for ranking.
 \end{itemize}
 
 \subsubsection{Message Broker and Publish/Subscribe Pattern}
 To support loose coupling and asynchronous workflows, the Application Layer includes a \textbf{Message Broker} implementing a publish/subscribe (event-driven) pattern. Services publish domain events to the broker when relevant state changes occur, while other services subscribe to specific topics and react independently. This design reduces synchronous dependencies between microservices, improves scalability for background processing (analysis and merging are turned into asynchronous pipelines driven by well-defined domain events), and allows services to evolve with limited coordination.
 
-The broker is deployed as a dedicated cluster and is responsible for reliably storing and delivering events to subscribed consumers. Events are designed to be lightweight: when data are large (e.g., high-frequency sensor streams), messages include identifiers and references to data persisted by the producing service, preventing congestion on the message bus.
+The broker is deployed as a dedicated cluster and is responsible for reliably storing and delivering events to subscribed consumers. Events are designed to loosen coupling between microservices: messages contain relevant payloads to avoid cross-microservice interaction.
 
 The main event flows are the following:
 
@@ -80,7 +79,7 @@ The main event flows are the following:
     
     Trip Service subscribes to \texttt{AnalysisCompleted} (from Analysis Service) that triggers statistics update inside the TripDB.
     
-    \item \textbf{Analysis Service} subscribes to \texttt{AutomaticTripRecorded} (from Trip Service) to compute trip statistics and detect anomalies. It publishes \texttt{AnalysisCompleted} as soon as the analysis is completed. It does not access TripDB directly, relying on events and references produced by Trip Service.
+    \item \textbf{Analysis Service} subscribes to \texttt{AutomaticTripRecorded} (from Trip Service) to compute trip statistics and detect anomalies. It publishes \texttt{AnalysisCompleted} as soon as the analysis is completed. It does not access TripDB directly, relying on events and payloads produced by Trip Service.
     
     \item \textbf{Merge Service} subscribes to \texttt{TripPublished} to aggregate contributions and compute/update the path score, then publishes \texttt{MergeCompleted}, containing the merge outcome and updated scoring information. Merge Service does not access PathDB directly: it produces merge results as events later consumed by Path Service.
     
@@ -88,19 +87,25 @@ The main event flows are the following:
 \end{itemize}
 
 \subsubsection{External Services Integration}
-The platform integrates with external Map and Weather services to enrich path computation and trip analysis. Access to these third-party services is encapsulated by dedicated \textbf{service adapters}, which isolate external APIs from the core application logic.
+The platform integrates with external Map and Weather services to enrich path computation and trip analysis. Access to these third-party services is encapsulated by dedicated \textbf{service adapters}, which isolate external APIs from the core application logic, allowing for future change of the external service without changing all the core business logic.
 
-Each adapter is protected by a \textbf{Circuit Breaker} mechanism to prevent cascading failures and to improve resilience against slow responses, latency spikes, or temporary unavailability of external providers.
+Each adapter is protected by a \textbf{Circuit Breaker} mechanism to prevent cascading failures and to improve resilience against slow responses, latency spikes, or temporary unavailability of external providers. The Circuit Breaker operates as a state machine with three states: Closed (normal operation), Open (fail-fast mode when failures exceed threshold), and Half-Open (recovery testing after a cooldown period).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{DD/images/circuit_brake_ss.png}
+\caption{Circuit Breaker State Machine}
+\end{figure}
 
 \subsection{Data Layer}
 The Data Layer is responsible for persistent data storage and follows a \textbf{database-per-service} pattern to ensure strong data ownership and isolation. Each microservice can access only its own datastore, preventing direct cross-service database access and reinforcing separation of concerns.
 
 \begin{itemize}
-    \item \textbf{Authentication Service} interacts exclusively with AuthDB, a relational database storing user credentials and authentication-related data.
+    \item Authentication Service interacts exclusively with \textbf{AuthDB}, a relational database storing user credentials and authentication-related data.
     
-    \item \textbf{Path Service} interacts exclusively with PathDB, a relational database containing public paths information.
+    \item Path Service interacts exclusively with \textbf{PathDB}, a relational database containing public paths information.
     
-    \item \textbf{Trip Service} interacts exclusively with TripDB, which is implemented as a time-series database to efficiently store high-frequency sensor data collected during trips.
+    \item Trip Service interacts exclusively with \textbf{TripDB}, which is implemented as a time-series database to efficiently store high-frequency sensor data collected during trips.
     \begin{itemize}
         \item During an automatically recorded trip, the mobile application continuously collects sensor data and, when the user stops the recording, sends the recorded trip data through the API Gateway to the Trip Service. The Trip Service immediately acknowledges successful reception so the client can safely discard the transmitted batches, and then it persists ingested trip data into the TripDB. This approach enables efficient handling of high-volume time-series streams while preserving a clear and controlled data flow from the client to persistent storage.
         \item Within TripDB, the Trip Service also maintains an append-only PublicationLog containing anonymized records of published trips: this log is immutable and persists independently from private trip data, which may be deleted by the user.
@@ -120,7 +125,7 @@ This section describes the physical deployment of the BBP platform, illustrating
 \begin{itemize}
     \item \textbf{Client Tier} consists of the users' mobile devices (Android/iOS), which host the BBP Mobile Application and embedded device sensors (GPS, accelerometer, gyroscope). The mobile application interacts locally with sensors through operating system APIs and communicates remotely with the backend using HTTPS.
     
-    All outbound client traffic is filtered by a Firewall, which allows inbound HTTPS connections exclusively to the API Gateway, protecting data and application layers from potential threats.
+    All outbound client traffic is filtered by a Firewall, which allows inbound HTTPS connections exclusively to the API Gateway, protecting data and application layers from potential man-in-the-middle threats.
     
     \item \textbf{Application Tier} hosts the core backend infrastructure and is deployed on an Application Server cluster. Client requests first pass through a Load Balancer, which distributes traffic across multiple replicated instances of the API Gateway (2..N) to ensure scalability and availability. Behind the API Gateway, each service (Authentication, Trip, Path, Analysis, and Merge) is deployed in replicated execution environments (2..N). Internal components, labeled as LB, represent service-specific load balancers that distribute requests received from the API Gateway across the available replicas of each microservice. Integration with external Map and Weather providers is handled through a dedicated Adapter Layer, where each adapter is protected by a Circuit Breaker (CB) mechanism to improve resilience against slow responses or temporary unavailability of third-party services.
     
@@ -149,7 +154,7 @@ This section describes the physical deployment of the BBP platform, illustrating
 \section{Runtime View}
 \label{sec:runtime-view}
 % Testo introduttivo
-For the sake of visual clarity and to avoid diagrammatic clutter, the API Gateway lifeline has been omitted from all of the sequence diagrams. Architecturally, however, it mediates all interactions between the Client and the Backend services and routes requests to the appropriate microservice without altering the core business logic.
+For the sake of visual clarity and to avoid diagrammatic clutter, the API Gateway lifeline has been omitted from all of the sequence diagrams. Architecturally, however, it mediates all interactions between the Client and the Backend services and routes requests to the appropriate microservice without altering the core business logic. It just handles shared concerns like request authorization and logging.
 
 % --------------------------------------------------------
 % 1. User Sign Up
@@ -194,9 +199,9 @@ Recording initiates when the Mobile App detects movement exceeding a speed thres
 % 4. Manual Recording and Insert Street Entry
 % --------------------------------------------------------
 \subsection{Manual Recording and Insert Street Entry}
-The Registered User manually builds a trip by inserting street entries (UC4.1). For every entry, the Trip Service validates the street name in real-time by querying the Map Service Adapter (safeguarded by the Circuit Breaker pattern). Once the user confirms the full list of streets, the service persists the trip in the Trip DB and publishes a \texttt{manualTripCreated} event to the Message Broker.
+The Registered User manually builds a trip by inserting street entries. For every entry, the Trip Service validates the street name in real-time by querying the Map Service Adapter (safeguarded by the Circuit Breaker pattern). Once the user confirms the full list of streets, the service persists the trip in the Trip DB and publishes a \texttt{manualTripCreated} event to the Message Broker.
 
-\textbf{Circuit Breaker Implementation:} Crucially, the synchronous interaction with the external Map Provider is protected by the Circuit Breaker pattern. This mechanism monitors the adapter for timeouts or failures. If the error rate exceeds a threshold, the circuit "opens" to fail-fast, preventing resource exhaustion and ensuring the backend remains responsive even during third-party service outages.
+\textbf{Circuit Breaker Implementation:} Crucially, the synchronous interaction with the external Map Provider is protected by the Circuit Breaker pattern. This mechanism operates as a state machine with three states: Closed (normal operation), Open (fail-fast mode), and Half-Open (recovery testing). The circuit monitors the adapter for timeouts or failures. If the error rate exceeds a threshold, the circuit transitions to "Open" to fail-fast, preventing resource exhaustion and ensuring the backend remains responsive even during third-party service outages. After a cooldown period, it enters Half-Open to test if the service has recovered before fully closing the circuit.
 
 \begin{figure}[H]
     \centering
@@ -254,7 +259,7 @@ The User requests their travel history. The Trip Service retrieves the list of t
 % 8. Delete Private Trip
 % --------------------------------------------------------
 \subsection{Delete Trip}
-The User selects a trip from their history and confirms deletion. A synchronous request is sent to the Trip Service, which permanently removes the specific record from the Trip DB. Crucially, this operation is scoped strictly to the private user data; it does not trigger any events to retract data from the public path network, preserving the integrity of previously aggregated community information.
+The User selects a trip from their history and confirms deletion. A synchronous request is sent to the Trip Service, which permanently removes the specific record from the Trip DB.  Crucially, this operation is scoped strictly to the private user data; it does not trigger any events to retract data from the public path network, preserving the integrity of previously aggregated community information (thanks to the anonymized immutable Publication Log).
 
 \begin{figure}[H]
     \centering

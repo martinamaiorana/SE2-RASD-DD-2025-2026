@@ -139,7 +139,7 @@ The goal of this phase is to replace the ``Mock Adapters'' with real integration
 \begin{itemize}
     \item Implement \textbf{Map Service Adapter} and \textbf{Weather Service Adapter} with Circuit Breaker:
     \begin{itemize}
-        \item define timeouts, retries policies, open/closed transitions
+        \item define timeouts, retries policies, open/half-open/closed transitions
         \item define fallback behavior (e.g., return cached/partial info or ``weather unavailable'')
     \end{itemize}
     \item Use mock servers to intentionally trigger latency spikes and failures to verify the Circuit Breaker opens and closes correctly.
