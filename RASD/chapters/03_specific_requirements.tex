@@ -14,7 +14,9 @@
 
     \item \textbf{Home Page and Search Bar}: The system must provides a home page featuring a top-positioned search bar for specifying origin and destination points through either direct map selection or the two streets name entries. For registered users, the page includes buttons for initiating automated or manual trip recording sessions, and provides access to personal trip history through bottom-positioned navigation controls.
 
-    \item \textbf{Trips History Page}: The system provides a "Your history" interface that displays a chronological list of recorded activities. Each entry includes the general location (e.g., Milano or Polimi), the date of the trip, and a validation status tag such as "To validate" or "Validated."
+    \item \textbf{Trips History Page}: The system provides a "Your history" interface that displays a chronological list of recorded activities. Each entry includes the general location (e.g., Milano or Polimi), the date of the trip, and a validation status tag such as "To validate" or "Validated." From here, the user can choose to delete one of their trips
+
+    \item \textbf{Trip Summary Page}: The "Trip summary" page provides a detailed overview of a recorded session. It displays key performance data including Total Time, Total distance, Average Speed and the Weather conditions at recording time. An interactive map occupies the central view, displaying the selected trip highlighted in green between designated markers.
 
     \item \textbf{Trip Validation Page}: The system includes a validation flow for detected obstacles. Each obstacle is presented with its confidence score percentage and a map location. Users can select "Confirm" or "Reject" for each item, and the process concludes with a "Validation summary" showing the total count of confirmed and rejected obstacles.
 
@@ -22,11 +24,10 @@
 
     \item \textbf{Path Searching Page}: The search interface allows users to define an "Origin" and a "Destination." Users can input locations by typing to receive auto-suggestions or by using the "Pick" from map feature. A prominent "Search" button is used to generate available routing options once both points are set.
 
-    \item \textbf{Path Viewing Page}: Upon searching, the system displays "Available Paths" (labeled Path A, B, and C) on an interactive map. A list at the bottom summarizes each path by its travel time and condition (e.g., "Optimal" or "Requires Maintenance"), with the most efficient route highlighted as "Recommended."
+    \item \textbf{Paths Viewing Page}: Upon searching, the system displays "Available Paths" on an interactive map. A list at the bottom summarizes each path by its travel time and condition, with the most efficient route highlighted as "Recommended."
 
-    \item \textbf{Trip Viewing (Trip Summary) Page}: The "Trip summary" page provides a detailed overview of a recorded session. It displays key performance data including Total Time, Total distance (e.g., 1.3km), Average Speed (e.g., $21~km/h$), and the Current Weather conditions (e.g., Sunny, $22^{\circ}C$).
+    \item \textbf{Path Summary Page}: The system provides a "Path Summary" interface that details a specific selected route. It displays key aggregated performance data, showing the Average Time, Average Speed, Total distance and Current Weather conditions. An interactive map occupies the central view, displaying the selected path highlighted in green between designated markers.
 
-    \item \textbf{Trip Deletion Page}: The system allows users to remove trips from their personal history. When a deletion is initiated, an "Are you sure?" prompt appears, warning that the action is irreversible. A "Trip deleted successfully!" notification confirms the removal of the record from the user's history.
 \end{itemize}
 
 \subsection{Hardware Interfaces}
