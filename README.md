@@ -38,8 +38,8 @@ This project consists of two documents to be produced:
 ├── RASD/                          # RASD source (LaTeX) — chapters, diagrams, images
 ├── DD/                            # DD source (LaTeX) — chapters, images, sequence diagrams
 ├── DeliveryFolder/                # Submitted PDF deliverables + Alloy model
-│   ├── RASD.pdf
-│   ├── DD.pdf
+│   ├── RASD_BriniLucarielloMaiorana.pdf
+│   ├── DD_BriniLucarielloMaiorana.pdf
 │   └── alloy/                     # Alloy models, assertions and example worlds
 ├── Assignment_RDD_AY_2025_2026.pdf   # Original project assignment (problem statement)
 └── README.md
